@@ -26,7 +26,6 @@ CXXFLAGS += $(INCLUDE)
 
 LIBS += $(USERLIBS)
 
-
 # this is where you  would normaly have the lib, bin and source directories
 BASEDIR = .
 LIBDIR = $(BASEDIR)/lib
@@ -34,55 +33,24 @@ EXEDIR = $(BASEDIR)/bin
 MACRODIR = $(BASEDIR)/src
 SRCDIR = $(BASEDIR)/src
 OBJDIR = $(BASEDIR)/obj
+TESTDIR = $(BASEDIR)/test
 OBJ_EXT=o
+TEST_EXT=cpp
 
 SRCS=$(wildcard $(BASEDIR)/src/*.cc)
-EXES=$(wildcard $(BASEDIR)/src/*.cpp)
+EXES=$(wildcard $(BASEDIR)/test/*.cpp)
 OBJS=$(subst $(SRCDIR), $(OBJDIR),$(subst cc,$(OBJ_EXT),$(SRCS)))
+BINS=$(subst $(TESTDIR), $(EXEDIR),$(subst .$(TEST_EXT),,$(EXES)))
 
-# deduce the targets:
-#TARGETS=$(subst .C,,$(subst $(MACRODIR),$(EXEDIR),$(EXES)))
-#TARGETS=$(subst .cpp,,$(subst $(SRCDIR),$(EXEDIR),$(SRC)))
+all:  $(BINS) 
 
-
-#all:  $(OBJS) lib  $(EXEDIR)/selection $(EXEDIR)/selectionTable $(EXEDIR)/qcd $(EXEDIR)/treeLoop $(EXEDIR)/treePlots $(EXEDIR)/fillHistosFromTree $(EXEDIR)/triggerEfficiency $(EXEDIR)/genLevelInfo $(EXEDIR)/skimTrees
-#all:  $(OBJS) lib $(EXES) $(EXEDIR)/fillZbbHistosFromTree $(EXEDIR)/selection $(EXEDIR)/selectionTable $(EXEDIR)/skimTrees $(EXEDIR)/selectionTableJES 
-all:  lib 
-#$(EXEDIR)/fillInclusiveJetHistos
-
-#all:  $(OBJS) lib $(EXEDIR)/fillInclusiveJetHistos $(EXEDIR)/printEvents
-
-
-#$(EXEDIR)/fillHistosFromTree $(EXEDIR)/skimTrees $(EXEDIR)/selection $(EXEDIR)/selectionTable $(EXEDIR)/jetTriggerEfficiency
-
+$(EXEDIR)/%: $(TESTDIR)/%.cpp $(LIBDIR)/lib$(LIBNAME).so
+	$(CXX) -o $@ $(CXXFLAGS) $< $(LIBS) -L$(LIBDIR) -l$(LIBNAME)
 
 $(OBJDIR)/%.$(OBJ_EXT): $(SRCDIR)/%.cc
 	$(CXX) $(CXXFLAGS) -c $<  -o $@
 
-#$(EXEDIR)/selection:$(OBJS) $(LIBDIR)/lib$(PROGNAME).so
-#	$(CXX) -o  $@ $(CXXFLAGS) $(MACRODIR)/selection.cpp $(LIBS) -L $(LIBDIR)  -l$(PROGNAME)
-
-#$(EXEDIR)/selectionTable:$(OBJS) $(LIBDIR)/lib$(PROGNAME).so
-#	$(CXX) -o  $@ $(CXXFLAGS) $(MACRODIR)/selectionTable.cpp $(LIBS) -L $(LIBDIR)  -l$(PROGNAME)
-
-#$(EXEDIR)/qcd:$(OBJS) $(LIBDIR)/lib$(PROGNAME).so
-#	$(CXX) -o  $@ $(CXXFLAGS) $(MACRODIR)/qcd.cpp $(LIBS) -L $(LIBDIR)  -l$(PROGNAME)
-
-#$(EXEDIR)/treeLoop:$(OBJS) $(LIBDIR)/lib$(PROGNAME).so
-#	$(CXX) -o  $@ $(CXXFLAGS) $(MACRODIR)/treeLoop.cpp $(LIBS) -L $(LIBDIR)  -l$(PROGNAME)
-
-#$(EXEDIR)/treePlots:$(OBJS) $(LIBDIR)/lib$(PROGNAME).so
-#	$(CXX) -o  $@ $(CXXFLAGS) $(MACRODIR)/treePlots.cpp $(LIBS) -L $(LIBDIR)  -l$(PROGNAME)
-
-#$(EXEDIR)/fillHistosFromTree:$(OBJS) $(LIBDIR)/lib$(PROGNAME).so
-#	$(CXX) -o  $@ $(CXXFLAGS) $(MACRODIR)/fillHistosFromTree.cpp $(LIBS) -L $(LIBDIR)  -l$(PROGNAME)
-
-
-#$(EXEDIR)/test:$(OBJS) $(LIBDIR)/lib$(PROGNAME).so
-#	$(CXX) -o  $@ $(CXXFLAGS) $(MACRODIR)/test.cpp $(LIBS) -L $(LIBDIR)  -l$(PROGNAME)
-
 $(LIBDIR)/lib$(LIBNAME).so:$(OBJS)
-	mkdir -p $(LIBDIR)
 	$(LD) $(LDFLAGS) -o $(LIBDIR)/lib$(LIBNAME).so  $^
 	
 	#$(LD) $(LDFLAGS) -o $(LIBDIR)/lib$(LIBNAME).so  $^ $(LIBS)
@@ -97,6 +65,6 @@ vars:
 	@echo "Executables:  " $(TARGETS)
 
 clean:
-	rm -f $(OBJS) $(LIBDIR)/lib$(LIBNAME).so
+	rm -f $(OBJS) $(LIBDIR)/lib$(LIBNAME).so $(BINS)
 
 
