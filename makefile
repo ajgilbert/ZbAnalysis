@@ -28,7 +28,7 @@ LIBS += $(USERLIBS)
 
 
 # this is where you  would normaly have the lib, bin and source directories
-BASEDIR = .
+BASEDIR = $(shell pwd)
 LIBDIR = $(BASEDIR)/lib
 EXEDIR = $(BASEDIR)/bin
 MACRODIR = $(BASEDIR)/src
@@ -54,7 +54,6 @@ $(OBJDIR)/%.$(OBJ_EXT): $(SRCDIR)/%.cc
 $(LIBDIR)/lib$(LIBNAME).so:$(OBJS)
 	$(LD) $(LDFLAGS) -o $(LIBDIR)/lib$(LIBNAME).so  $^
 	
-	#$(LD) $(LDFLAGS) -o $(LIBDIR)/lib$(LIBNAME).so  $^ $(LIBS)
 
 lib: $(LIBDIR)/lib$(LIBNAME).so
 
