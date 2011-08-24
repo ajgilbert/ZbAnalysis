@@ -35,6 +35,7 @@ MACRODIR = $(BASEDIR)/src
 SRCDIR = $(BASEDIR)/src
 OBJDIR = $(BASEDIR)/obj
 TESTDIR = $(BASEDIR)/test
+DOCDIR= $(BASEDIR)/docs
 OBJ_EXT=o
 TEST_EXT=cpp
 
@@ -43,7 +44,14 @@ EXES=$(wildcard $(BASEDIR)/test/*.cpp)
 OBJS=$(subst $(SRCDIR), $(OBJDIR),$(subst cc,$(OBJ_EXT),$(SRCS)))
 BINS=$(subst $(TESTDIR), $(EXEDIR),$(subst .$(TEST_EXT),,$(EXES)))
 
-all:  $(BINS) 
+all:  $(BINS)
+
+docs: all
+	doxygen Doxyfile
+	$(MAKE) -C $(DOCDIR)/latex
+	cp $(DOCDIR)/latex/refman.pdf $(DOCDIR)/$(LIBNAME)-CodeManual.pdf
+	
+
 
 $(EXEDIR)/%: $(TESTDIR)/%.cpp $(LIBDIR)/lib$(LIBNAME).so
 	$(CXX) -o $@ $(CXXFLAGS) $< $(LIBS) -L$(LIBDIR) -l$(LIBNAME)
@@ -65,6 +73,6 @@ vars:
 	@echo "Executables:  " $(TARGETS)
 
 clean:
-	rm -f $(OBJS) $(LIBDIR)/lib$(LIBNAME).so $(BINS)
+	rm -rf $(OBJS) $(LIBDIR)/lib$(LIBNAME).so $(EXEDIR)/* $(DOCDIR)/* 
 
 
