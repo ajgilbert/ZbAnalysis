@@ -26,6 +26,7 @@ CXXFLAGS += $(INCLUDE)
 
 LIBS += $(USERLIBS)
 
+
 # this is where you  would normaly have the lib, bin and source directories
 BASEDIR = .
 LIBDIR = $(BASEDIR)/lib
