@@ -49,7 +49,7 @@ $(EXEDIR)/%: $(TESTDIR)/%.cpp $(LIBDIR)/lib$(LIBNAME).so
 	$(CXX) -o $@ $(CXXFLAGS) $< $(LIBS) -L$(LIBDIR) -l$(LIBNAME)
 
 $(OBJDIR)/%.$(OBJ_EXT): $(SRCDIR)/%.cc
-	$(CXX) $(CXXFLAGS) -c $<  -o $@
+	$(CXX) $(CXXFLAGS) -fPIC -c $<  -o $@
 
 $(LIBDIR)/lib$(LIBNAME).so:$(OBJS)
 	$(LD) $(LDFLAGS) -o $(LIBDIR)/lib$(LIBNAME).so  $^
