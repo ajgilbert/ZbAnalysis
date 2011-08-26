@@ -11,12 +11,12 @@ LIBNAME = ZbAnalysis
 #USERLIBS +=   -L $(CMSSW_BASE)/lib/$(SCRAM_ARCH) -lUserCodeHbbAnalysis  -lCondFormatsPhysicsToolsObjects -lRecoBTagPerformanceDB
 #USERLIBS +=  -L $(CMSSW_RELEASE_BASE)/lib/$(SCRAM_ARCH) -lFWCoreFWLite -L /afs/cern.ch/cms/sw/slc5_ia32_gcc434/cms/cmssw/CMSSW_3_6_1/lib/$(SCRAM_ARCH) -lFWCoreFWLite
 
-CXXFLAGS = -Wall -W -Wold-style-cast -O2
+CXXFLAGS = -Wall -W -Wold-style-cast -Werror -O2
 LDFLAGS = -shared -Wall -W 
 # -ansi
 
-CXX=g++
-LD=g++
+CXX=clang++
+LD=clang++
 
 AR = ar
 
