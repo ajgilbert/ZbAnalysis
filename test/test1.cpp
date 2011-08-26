@@ -1,4 +1,5 @@
 #include <iostream>
+#include <vector>
 #include "RangeVector.h"
 
 int main(int argc, char* argv[]){
@@ -9,7 +10,5 @@ int main(int argc, char* argv[]){
     std::cout << i << "\t" << argv[i] << std::endl;
   }
   RangeVector rangevec;
-
   return 0;
-
 }
