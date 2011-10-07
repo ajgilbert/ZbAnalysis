@@ -1,19 +1,19 @@
 # name of the library
 LIBNAME = ZbAnalysis
 
-#USERINCLUDES += $(shell root-config --cflags)
+USERINCLUDES += $(shell root-config --cflags)
 USERINCLUDES += -I$(ROOTSYS)/include
 USERINCLUDES += -I $(CMSSW_BASE)/src/ -I $(CMSSW_RELEASE_BASE)/src/
 
 USERLIBS += $(shell root-config --glibs) 
 #USERLIBS +=  -L$(ROOTSYS)/lib -lCore -lCint -lRIO -lNet -lHist -lGraf -lGraf3d -lGpad -lTree -lRint -lPostscript -lMatrix -lPhysics -lMathCore -lThread -lz -lGui -pthread -lm -ldl -rdynamic
 
-USERLIBS += -L $(CMSSW_BASE)/lib/$(SCRAM_ARCH) -lUserCodeHbbAnalysis
+#USERLIBS += -L $(CMSSW_BASE)/lib/$(SCRAM_ARCH) -lUserCodeHbbAnalysis
 
 #-lCondFormatsPhysicsToolsObjects -lRecoBTagPerformanceDB
 #USERLIBS +=  -L $(CMSSW_RELEASE_BASE)/lib/$(SCRAM_ARCH) -lFWCoreFWLite -L /afs/cern.ch/cms/sw/slc5_ia32_gcc434/cms/cmssw/CMSSW_3_6_1/lib/$(SCRAM_ARCH) -lFWCoreFWLite
 
-CXXFLAGS = -Wall -W -Wold-style-cast -O2
+CXXFLAGS = -Wall -W -O2 
 LDFLAGS = -shared -Wall -W 
 # -ansi
 
@@ -62,7 +62,7 @@ $(OBJDIR)/%.$(OBJ_EXT): $(SRCDIR)/%.cc
 	$(CXX) $(CXXFLAGS) -fPIC -c $<  -o $@
 
 $(LIBDIR)/lib$(LIBNAME).so:$(OBJS)
-	$(LD) $(LDFLAGS) -o $(LIBDIR)/lib$(LIBNAME).so  $^
+	$(LD) $(LDFLAGS) -o $(LIBDIR)/lib$(LIBNAME).so  $^ $(LIBS)
 	
 
 lib: $(LIBDIR)/lib$(LIBNAME).so
