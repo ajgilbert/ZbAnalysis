@@ -3,12 +3,14 @@ LIBNAME = ZbAnalysis
 
 USERINCLUDES += $(shell root-config --cflags)
 USERINCLUDES += -I$(ROOTSYS)/include
+USERINCLUDES += -I$(CMS_PATH)/$(SCRAM_ARCH)/external/boost/1.44.0-cms/include/
 USERINCLUDES += -I $(CMSSW_BASE)/src/ -I $(CMSSW_RELEASE_BASE)/src/
 
 USERLIBS += $(shell root-config --glibs) 
 #USERLIBS +=  -L$(ROOTSYS)/lib -lCore -lCint -lRIO -lNet -lHist -lGraf -lGraf3d -lGpad -lTree -lRint -lPostscript -lMatrix -lPhysics -lMathCore -lThread -lz -lGui -pthread -lm -ldl -rdynamic
 
 USERLIBS += -L$(CMSSW_BASE)/lib/$(SCRAM_ARCH) -lUserCodeHbbAnalysis
+USERLIBS += -L$(CMS_PATH)/$(SCRAM_ARCH)/external/boost/1.44.0-cms/lib/ -lboost_regex
 USERLIBS += -L$(CMSSW_RELEASE_BASE)/lib/$(SCRAM_ARCH) -lFWCoreFWLite
 
 #-lCondFormatsPhysicsToolsObjects -lRecoBTagPerformanceDB
