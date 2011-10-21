@@ -21,9 +21,11 @@ namespace ZbAnalysis{
       public:
         BranchHandler(){
           SetBranchPtr(0);
+          ptr_ = 0;
         }
         BranchHandler(TTree* tree, std::string branch_name){
           SetBranchPtr(tree->GetBranch(branch_name.c_str()));
+          ptr_ = 0;
         }
         void SetAddress(){
           GetBranchPtr()->SetAddress(&ptr_);

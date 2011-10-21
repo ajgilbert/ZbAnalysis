@@ -1,0 +1,53 @@
+#include "TLorentzVector.h"
+#include "TMath.h"
+#include "HbbEventHelpers.h"
+#include "UserCode/HbbAnalysis/interface/HbbEvent.hh"
+#include "UserCode/HbbAnalysis/interface/Objects.hh"
+
+//-----------------------------------------------------------------------------
+double ajg::DR(double p1phi, double p1eta, double p2phi, double p2eta){
+  double dphi = fabs(p1phi - p2phi);
+  if (dphi > TMath::Pi()) dphi = (2.0*TMath::Pi() - dphi);
+  double deta = fabs(p1eta - p2eta);
+  return TMath::Sqrt(dphi*dphi + deta*deta);
+}
+//-----------------------------------------------------------------------------
+
+//-----------------------------------------------------------------------------
+HbbAnalysis::GenParticle* ajg::PartonMatchFromGenJet(HbbAnalysis::GenJet* genJet, std::vector<HbbAnalysis::GenParticle*> genVec, double dr){
+  if (genVec.size() > 0){
+    std::vector<double> drVec;
+    drVec.resize(genVec.size());
+    double genJetPhi = genJet->genJetVars().phi;
+    double genJetEta = genJet->genJetVars().eta;
+    for (unsigned i = 0; i < genVec.size(); ++i){
+      double partPhi = genVec.at(i)->partVars().phi;
+      double partEta = genVec.at(i)->partVars().eta;
+      drVec.at(i) = ajg::DR(genJetPhi,genJetEta,partPhi,partEta);
+    }
+    std::vector<double>::iterator min_it  = min_element(drVec.begin(),drVec.end());
+    unsigned min_index = unsigned(min_it-drVec.begin());
+    if (drVec[min_index] < dr){
+      return genVec[min_index];
+    }
+  }//If there is at least one gen particle
+  return 0;
+}
+//-----------------------------------------------------------------------------
+
+std::vector<HbbAnalysis::MCVars> ajg::GetBConstituents(HbbAnalysis::GenJet* genJet){
+  std::vector<HbbAnalysis::MCVars> constit;
+  if (genJet->nConstituents() == 0) {
+    std::cerr << "--Warning: Method GetBConstituents passed a GenJet with no constituents, vector has size: " << genJet->constituents().size() << std::endl;
+    return constit; 
+  }
+  
+  constit = genJet->constituents();
+  for (std::vector<HbbAnalysis::MCVars>::iterator it = constit.begin(); it != constit.end();++it){
+    if (abs((*it).pdgId) != 5) {
+      constit.erase(it);
+      --it;
+    }
+  }
+  return constit;
+}

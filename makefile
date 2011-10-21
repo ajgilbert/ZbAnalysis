@@ -1,6 +1,9 @@
 # name of the library
 LIBNAME = ZbAnalysis
 
+#Necessary to use shell built-in commands
+SHELL=bash
+
 USERINCLUDES += $(shell root-config --cflags)
 USERINCLUDES += -I$(ROOTSYS)/include
 USERINCLUDES += -I $(CMSSW_BASE)/src/ -I $(CMSSW_RELEASE_BASE)/src/
@@ -14,10 +17,16 @@ USERLIBS += -L$(CMSSW_RELEASE_BASE)/lib/$(SCRAM_ARCH) -lFWCoreFWLite
 #-lCondFormatsPhysicsToolsObjects -lRecoBTagPerformanceDB
 CXXFLAGS = -Wall -W -O2 
 LDFLAGS = -shared -Wall -W 
-# -ansi
 
 CXX=clang++
 LD=clang++
+CLANGPATH := $(shell type -p clang++)
+
+ifeq ($(CLANGPATH),)
+$(warning clang++ not found, reverting to g++!)
+CXX=g++
+LD=g++
+endif
 
 AR = ar
 
