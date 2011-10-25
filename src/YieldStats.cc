@@ -1,161 +1,125 @@
 #include "YieldStats.hh"
+#include "MiscFunctions.hh"
 #include <stdarg.h>
 #include <iostream>
 
 namespace HbbAnalysis {//namespace
 
-  YieldStats::YieldStats(std::string sampleName, std::string yieldName){
+  YieldStats::YieldStats(std::string sampleName, std::string yieldName) {
     sampleName_ = sampleName;
     yieldName_ = yieldName;
   }
+  
+  //Setters
+  void YieldStats::SetSampleName(std::string const& sampleName) {
+    sampleName_ = sampleName;
+  }
+  void YieldStats::SetYieldName(std::string const& yieldName) {
+    yieldName_ = yieldName;
+  }
     
-  void YieldStats::InitialiseStepNames(std::vector<std::string> const& stepNames){
+  void YieldStats::SetStepNames(std::vector<std::string> const& stepNames) {
     stepNames_ = stepNames;
-    BuildStepIndexMap();
-  }
-
-  void YieldStats::InitialiseStepNames(unsigned numArgs, ... ){
-    stepNames_.clear();
-    va_list listPointer;
-    va_start(listPointer, numArgs);
-    for (unsigned i = 0; i < numArgs; ++i){
-      stepNames_.push_back(std::string(va_arg(listPointer,char*))); 
-    }
-    BuildStepIndexMap();
-  }
-
-  void YieldStats::InitialiseSplitNames(std::vector<std::string> const& splitNames){
-    splitNames_ = splitNames;
-    BuildSplitIndexMap();
-  }
-
-  void YieldStats::InitialiseSplitNames(unsigned numArgs, ... ){
-    splitNames_.clear();
-    va_list listPointer;
-    va_start(listPointer, numArgs);
-    for (unsigned i = 0; i < numArgs; ++i){
-      splitNames_.push_back(std::string(va_arg(listPointer,char*))); 
-    }
-    BuildSplitIndexMap();
-  }
-
-  void YieldStats::BuildStepIndexMap(){
     for (unsigned i = 0; i < stepNames_.size(); ++i){
       stepIndexMap_[stepNames_[i]] = i;
     }
   }
+
+  void YieldStats::SetBinNames(std::vector<std::string> const& binNames) {
+    binNames_ = binNames;
+    for (unsigned i = 0; i < binNames_.size(); ++i){
+      binIndexMap_[binNames_[i]] = i;
+    }
+  }
   
-  void YieldStats::BuildSplitIndexMap(){
-    for (unsigned i = 0; i < splitNames_.size(); ++i){
-      splitIndexMap_[splitNames_[i]] = i;
-    }
+  //Getters
+  std::vector<std::string> YieldStats::GetStepNames() const {
+    return stepNames_;
   }
 
-  void YieldStats::IncrementCount(unsigned run, std::string stepName, std::string splitName, double value)
-  {
-    if (stepIndexMap_.count(stepName) == 0 || splitIndexMap_.count(splitName) == 0){
-      std::cerr << "Warning in method YieldStats::IncrementCount: attempt to increase count with unrecognised string, no increase will occur" << std::endl;
-      return;
-    }
-    IncrementCount(run, stepIndexMap_[stepName], splitIndexMap_[splitName], value);
+  std::vector<std::string> YieldStats::GetBinNames() const {
+    return binNames_;
   }
-
-  void YieldStats::IncrementCount(unsigned run, unsigned stepIndex, unsigned splitIndex,  double value){
+  
+  void YieldStats::IncrementCount(unsigned run, unsigned binIndex, unsigned stepIndex,  double value){
 
     //Check if map already has key "run", if not, construct nested vector of appropriate size
     if (runIndexMap_.count(run) == 0){
       runIndexMap_[run] = yieldVector_.size();
-      yieldVector_.resize(yieldVector_.size() + (stepNames_.size()*splitNames_.size()));
+      yieldVector_.resize(yieldVector_.size() + (binNames_.size()*stepNames_.size()));
     }
-    try{
-      yieldVector_.at(runIndexMap_[run] + stepIndex + splitIndex*stepNames_.size()) += value;
+    at(runIndexMap_[run], binIndex, stepIndex) += value;
+  }
+  
+  void YieldStats::IncrementCount(unsigned run, std::string binName, std::string stepName, double value)
+  {
+    if (stepIndexMap_.count(stepName) == 0 || binIndexMap_.count(binName) == 0){
+      std::cerr << 
+        "Warning: Attempt to increment count with unrecognised string" << std::endl;
+      return;
+    }
+    IncrementCount(run, binIndexMap_[binName], stepIndexMap_[stepName], value);
+  }
+
+  double & YieldStats::at(unsigned runIndex, unsigned binIndex, unsigned stepIndex) {
+    try {
+      return yieldVector_.at(runIndex + binIndex + (stepIndex*binNames_.size())); 
     } 
-    catch(std::exception& e)
+    catch (std::exception& e)
     {
-      std::cerr << "Exception caught in method YieldStats::IncrementCount: " << e.what() << std::endl;
+      std::cerr << "Exception caught attempting to access invalid yield: " << e.what() << std::endl;
+      throw;
+    }
+  };
+
+  double YieldStats::at(unsigned runIndex, unsigned binIndex, unsigned stepIndex) const {
+    try {
+      return yieldVector_.at(runIndex + binIndex + (stepIndex*binNames_.size())); 
+    } 
+    catch (std::exception& e)
+    {
+      std::cerr << "Exception caught attempting to access invalid yield: " << e.what() << std::endl;
+      return 0;
     }
   }
 
-  std::vector<std::string> YieldStats::GetStepNames() {
-    return stepNames_;
-  }
-
-  std::vector<std::string> YieldStats::GetSplitNames() {
-    return splitNames_;
-  }
-
-  double YieldStats::GetYieldAllRunsAllSplits(std::string stepName){
-    double count = 0.0;
-    std::map<unsigned, unsigned>::const_iterator iter;
-    for (iter = runIndexMap_.begin(); iter != runIndexMap_.end(); ++iter){
-      for (unsigned j = 0; j < splitNames_.size(); ++j){
-        count += GetYield(iter->second, stepIndexMap_[stepName], j);
-      }
-    }
-    return count;
+  double YieldStats::CalculateYield(std::string stepName) const {
+    return CalculateYield(stepName, 0, std::numeric_limits<unsigned>::max(), binNames_);
   }
   
-  double YieldStats::GetYieldFilterRunsAllSplits(
-      std::string stepName, 
-      unsigned runMin, 
-      unsigned runMax){
-    double count = 0.0;
-    std::map<unsigned, unsigned>::const_iterator iter;
-    for (iter = runIndexMap_.begin(); iter != runIndexMap_.end(); ++iter){
-      if (iter->first < runMin || iter->first > runMax) continue;
-      for (unsigned j = 0; j < splitNames_.size(); ++j){
-        count += GetYield(iter->second, stepIndexMap_[stepName], j);
-      }
-    }
-    return count;
+  double YieldStats::CalculateYield(std::string stepName, unsigned minRun, unsigned maxRun) const {
+    return CalculateYield(stepName, minRun, maxRun, binNames_);
   }
   
-  double YieldStats::GetYieldAllRunsFilterSplits(
-      std::string stepName, 
-      std::vector<std::string> splitNames){
-    double count = 0.0;
-    std::map<unsigned, unsigned>::const_iterator iter;
-    for (iter = runIndexMap_.begin(); iter != runIndexMap_.end(); ++iter){
-      for (unsigned j = 0; j < splitNames.size(); ++j){
-        count += GetYield(iter->second, stepIndexMap_[stepName], splitIndexMap_[splitNames[j]]);
-      }
-    }
-    return count;
+  double YieldStats::CalculateYield(std::string stepName, std::vector<std::string> binNames) const {
+    return CalculateYield(stepName, 0, std::numeric_limits<unsigned>::max(), binNames);
   }
   
-  double YieldStats::GetYieldFilterRunsFilterSplits(
-      std::string stepName, 
-      unsigned runMin, 
-      unsigned runMax, 
-      std::vector<std::string> splitNames){
+  double YieldStats::CalculateYield(std::string stepName, 
+                                    unsigned minRun, unsigned maxRun, 
+                                    std::vector<std::string> binNames) const {
     double count = 0.0;
     std::map<unsigned, unsigned>::const_iterator iter;
     for (iter = runIndexMap_.begin(); iter != runIndexMap_.end(); ++iter){
-      if (iter->first < runMin || iter->first > runMax) continue;
-      for (unsigned j = 0; j < splitNames.size(); ++j){
-        count += GetYield(iter->second, stepIndexMap_[stepName], splitIndexMap_[splitNames[j]]);
+      if (iter->first < minRun || iter->first > maxRun) continue;
+      for (unsigned j = 0; j < binNames.size(); ++j){
+        count += at(iter->second, binIndexMap_.find(binNames[j])->second, stepIndexMap_.find(stepName)->second);
       }
     }
     return count;
   }
 
-  double YieldStats::GetYield(unsigned runIndex, unsigned stepIndex, unsigned splitIndex){
-    return yieldVector_.at(runIndex + stepIndex + splitIndex*stepNames_.size());
-  }
-  
 
-  void YieldStats::PrintMap(){
-
+  void YieldStats::Print() const {
     for (std::map<unsigned,unsigned>::const_iterator it = runIndexMap_.begin();
         it != runIndexMap_.end();
         ++it){
-
       std::cout << "---------------------" << std::endl;
       std::cout << "Run: " << it->first << std::endl;
       std::cout << "---------------------" << std::endl;
       for (unsigned i = 0; i < stepNames_.size(); ++i){
-        for (unsigned k = 0; k < splitNames_.size(); ++k){
-        std::cout << GetYield(it->second, i, k) << "\t";
+        for (unsigned k = 0; k < binNames_.size(); ++k){
+        std::cout << at(it->second, k, i) << "\t";
         }
         std::cout << std::endl;
       }

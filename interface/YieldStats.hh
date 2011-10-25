@@ -10,49 +10,44 @@ namespace HbbAnalysis {//namespace
 
 
   class YieldStats {
-
-
   public:
     YieldStats(std::string sampleName, std::string yieldName);
     ~YieldStats(){;}
     YieldStats(){;}
-    void InitialiseStepNames(std::vector<std::string> const& stepNames);
-    void InitialiseStepNames(unsigned, ... );
-    void InitialiseSplitNames(std::vector<std::string> const& splitNames);
-    void InitialiseSplitNames(unsigned numArgs, ... );
-    void IncrementCount(unsigned run, std::string stepName, std::string splitName, double value);
-    void IncrementCount(unsigned run, unsigned stepIndex, unsigned splitIndex,  double value);
 
-    double GetYield(unsigned runIndex, unsigned stepIndex, unsigned splitIndex);
-    std::vector<std::string> GetStepNames();
-    std::vector<std::string> GetSplitNames();
-    double GetYieldAllRunsAllSplits(std::string stepName);
-    double GetYieldFilterRunsAllSplits(std::string stepName, unsigned runMin, unsigned runMax);
-    double GetYieldAllRunsFilterSplits(std::string stepName, std::vector<std::string> splitNames);
-    double GetYieldFilterRunsFilterSplits(std::string stepName, unsigned runMin, unsigned runMax, std::vector<std::string> splitnames);
+    //Setters
+    void SetSampleName(std::string const& sampleName);
+    void SetYieldName(std::string const& yieldName);
+    void SetStepNames(std::vector<std::string> const& stepNames);
+    void SetBinNames(std::vector<std::string> const& binNames);
+
+    //Getters
+    std::vector<std::string> GetStepNames() const;
+    std::vector<std::string> GetBinNames() const;
+
+    void IncrementCount(unsigned run, unsigned binIndex, unsigned stepIndex,  double value);
+    void IncrementCount(unsigned run, std::string binName, std::string stepName, double value);
+
+    double CalculateYield(std::string stepName) const;
+    double CalculateYield(std::string stepName, unsigned minRun, unsigned maxRun) const;
+    double CalculateYield(std::string stepName, std::vector<std::string> binNames) const;
+    double CalculateYield(std::string stepName, unsigned minRun, unsigned maxRun, std::vector<std::string> binNames) const;
+
+    //Access Methods
+    double & at(unsigned runIndex, unsigned binIndex, unsigned stepIndex);
+    double at(unsigned runIndex, unsigned binIndex, unsigned stepIndex) const;
+
+    void Print() const;
     
-    
-    //double GetYieldAllRuns(unsigned stepIndex, unsigned splitIndex);
-
-
-    void PrintMap();
-    
-
-
   private:
     std::string sampleName_;
     std::string yieldName_;
     std::vector<double> yieldVector_;
     std::vector<std::string> stepNames_;
-    std::vector<std::string> splitNames_;
-
+    std::vector<std::string> binNames_;
     std::map<std::string,unsigned> stepIndexMap_;
-    std::map<std::string,unsigned> splitIndexMap_;
+    std::map<std::string,unsigned> binIndexMap_;
     std::map<unsigned, unsigned> runIndexMap_;
-
-    void BuildStepIndexMap();
-    void BuildSplitIndexMap();
-
   };
   
 }//namespace

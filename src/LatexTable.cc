@@ -69,15 +69,15 @@ namespace HbbAnalysis {//namespace
         double count = 0.0;
         if (runRestricted_) {
           if (splitRestricted_) {
-            count = yieldStatsMap_[yieldStatsNames_[j]]->GetYieldFilterRunsFilterSplits(stepNames[i], startRun_, endRun_, selectedSplits_);
+            count = yieldStatsMap_[yieldStatsNames_[j]]->CalculateYield(stepNames[i], startRun_, endRun_, selectedSplits_);
           } else {
-            count = yieldStatsMap_[yieldStatsNames_[j]]->GetYieldFilterRunsAllSplits(stepNames[i], startRun_, endRun_);
+            count = yieldStatsMap_[yieldStatsNames_[j]]->CalculateYield(stepNames[i], startRun_, endRun_);
           }
         } else {
           if (splitRestricted_){
-            count = yieldStatsMap_[yieldStatsNames_[j]]->GetYieldAllRunsFilterSplits(stepNames[i], selectedSplits_);
+            count = yieldStatsMap_[yieldStatsNames_[j]]->CalculateYield(stepNames[i], selectedSplits_);
           } else {
-            count = yieldStatsMap_[yieldStatsNames_[j]]->GetYieldAllRunsAllSplits(stepNames[i]);
+            count = yieldStatsMap_[yieldStatsNames_[j]]->CalculateYield(stepNames[i]);
           }
         }
         
