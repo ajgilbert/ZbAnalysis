@@ -17,7 +17,7 @@ USERLIBS += -L$(CMS_PATH)/$(SCRAM_ARCH)/external/boost/1.44.0-cms/lib/ -lboost_r
 USERLIBS += -L$(CMSSW_RELEASE_BASE)/lib/$(SCRAM_ARCH) -lFWCoreFWLite
 
 #-lCondFormatsPhysicsToolsObjects -lRecoBTagPerformanceDB
-CXXFLAGS = -Wall -W -O2 
+CXXFLAGS = -Wall -W -Wno-unused-function -Wno-parentheses -Wno-char-subscripts -O2 
 LDFLAGS = -shared -Wall -W 
 
 CXX=clang++

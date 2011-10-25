@@ -1,71 +1,52 @@
 #include <iostream>
 #include <vector>
 #include <map>
-#include "UserCode/HbbAnalysis/interface/YieldStats.hh"
-#include "UserCode/HbbAnalysis/interface/HbbEvent.hh"
-#include "TLorentzVector.h"
-#include "TFile.h"
-#include "TTree.h"
-#include "TTreeStorage.hh"
-#include "FWCore/FWLite/interface/AutoLibraryLoader.h"
-#include "TSystem.h"
+
+#include "YieldStats.hh"
+#include "LatexTable.hh"
 
 using namespace HbbAnalysis;
 
 
 int main(int argc, char* argv[]){
 
-  gSystem->Load("libFWCoreFWLite.so");
-  gSystem->Load("libUserCodeHbbAnalysis.so");
-  AutoLibraryLoader::enable();
-  gSystem->ListLibraries();
   std::cout << "Hello World!" << std::endl;
   std::cout << "Arguments passed to program: " << argc << std::endl;
   for (int i = 0; i < argc; ++i){
     std::cout << i << "\t" << argv[i] << std::endl;
   }
   
-
-  /*
-  YieldStats stats("Z+b");
-  stats.InitialiseStepNames(3,"step1","step2","step3");
-  stats.InitialiseSplitNames(2, "split1","split2");
-  stats.IncrementCount(1000,0,0,1.1);
-  stats.IncrementCount(1000,1,1,1.2);
-  stats.IncrementCount(1001,"step3","split1",5.2);
-  stats.IncrementCount(10,"step3","split1",10.5);
+  YieldStats stats("Z+b","NO_RW");
+  stats.InitialiseStepNames(4,"step1","step2","step3","step4");
+  stats.InitialiseSplitNames(3, "split1","split2","split3");
+  stats.IncrementCount(1000,0,0,1);
+  stats.IncrementCount(1000,1,1,2);
+  stats.IncrementCount(2000,3,0,3);
+  stats.IncrementCount(2000,2,2,4);
+  stats.IncrementCount(3000,1,2,5);
+  stats.IncrementCount(3000,0,1,6);
   stats.PrintMap();
 
-  TFile f("test.root","RECREATE");
-  
-  SaveViaTree<YieldStats>(f, stats, "NO_RW");
-  YieldStats stats2 = LoadViaTree<YieldStats>(f,"NO_RW");
-  stats2.PrintMap();
-  f.Close();
-  */
-
-  TFile f("AnaTree.root");
-  gDirectory->cd("/treeMaker/HbbAnalysis");
-  TTree* t = (TTree*)gDirectory->Get("Tree");
-  HbbAnalysis::HbbEvent* event = 0;
-  t->SetBranchAddress("HbbEvent",&event);
-  t->GetEntry(0);
-  std::cout << "Event: " << event << std::endl;
-  std::vector<HbbAnalysis::Jet>* jets = &(event->ak7pfJets());
-  for (unsigned i = 0; i < jets->size(); ++i){
-    std::cout << "Jet " << i << ":" << std::endl;
-    HbbAnalysis::JetECorVars corrs = jets->at(i).ecorVars();
-    std::map<std::string,double> vals = corrs.Levels;
-    std::map<std::string,double>::const_iterator iter;
-    for (iter = vals.begin(); iter != vals.end(); ++iter){
-      std::cout << iter->first << "\t" << iter->second << std::endl;
-    }
-  }
-
-  
+  YieldStats statsD("Data","NO_RW");
+  statsD.InitialiseStepNames(4,"step1","step2","step3","step4");
+  statsD.InitialiseSplitNames(3, "split1","split2","split3");
+  statsD.IncrementCount(1000,2,2,1);
+  statsD.IncrementCount(1000,1,0,2);
+  statsD.IncrementCount(2000,0,2,3);
+  statsD.IncrementCount(2000,0,1,4);
+  statsD.IncrementCount(3000,1,1,5);
+  statsD.IncrementCount(3000,3,2,6);
+  statsD.PrintMap();
 
 
-  
- 
+  LatexTable table;
+  table.AddYieldStats("Z+b",stats);
+  table.AddYieldStats("Data",statsD);
+  table.RestrictToRunRange(2000,3000);
+  std::vector<std::string> splits;
+  splits.push_back("split2");
+  table.CombineSplitsByName(splits);
+  table.MakeTable();
+
   return 0;
 }
