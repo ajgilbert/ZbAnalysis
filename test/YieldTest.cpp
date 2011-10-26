@@ -18,48 +18,35 @@ int main(int argc, char* argv[]){
   for (int i = 0; i < argc; ++i){
     std::cout << i << "\t" << argv[i] << std::endl;
   }
- 
-  TEfficiency eff;
-  double total = 21180497;
-  //double total = 702259;
-  double pass = 135967;
-  double upperEff = eff.ClopperPearson(total,pass,0.683 ,1);
-  double lowerEff = eff.ClopperPearson(total,pass,0.683 ,0);
-  std::cout << pass << "/" << total << ": " << pass/total << std::endl;
-  std::cout << "--Upper: " << upperEff << "\t" << upperEff*total << "\t" << (upperEff*total)-pass << std::endl;
-  std::cout << "--Lower: " << lowerEff << "\t" << lowerEff*total << "\t" << (lowerEff*total)-pass << std::endl;
-
 
   YieldStats stats("Z+b","NO_RW");
-  stats.SetStepNames(StringVecify(4,"step1","step2","step3","step4"));
-  stats.SetBinNames(StringVecify(3, "split1","split2","split3"));
-  stats.IncrementCount(1000,0,0,1);
-  stats.IncrementCount(1000,1,1,2);
-  stats.IncrementCount(2000,3,0,3);
-  stats.IncrementCount(2000,2,2,4);
-  stats.IncrementCount(3000,1,2,5);
-  stats.IncrementCount(3000,0,1,6);
+  stats.SetStepNames(StringVecify(2,"Lepton Pair","Jet ID"));
+  stats.SetBinNames(StringVecify(1, "all"));
+  stats.IncrementCount(1,0,0,202011);
+  stats.IncrementCount(1,0,1,55868);
   stats.Print();
 
+  YieldStats statsC("Z+c","NO_RW");
+  statsC.SetStepNames(StringVecify(2,"Lepton Pair","Jet ID"));
+  statsC.SetBinNames(StringVecify(1, "all"));
+  statsC.IncrementCount(1,0,0,933108);
+  statsC.IncrementCount(1,0,1,204167);
+  statsC.Print();
+  
   YieldStats statsD("Data","NO_RW");
-  statsD.SetStepNames(StringVecify(4,"step1","step2","step3","step4"));
-  statsD.SetBinNames(StringVecify(3, "split1","split2","split3"));
-  statsD.IncrementCount(1000,2,2,1);
-  statsD.IncrementCount(1000,1,0,2);
-  statsD.IncrementCount(2000,0,2,3);
-  statsD.IncrementCount(2000,0,1,4);
-  statsD.IncrementCount(3000,1,1,5);
-  statsD.IncrementCount(3000,3,2,6);
+  statsD.SetStepNames(StringVecify(2,"Lepton Pair","Jet ID"));
+  statsD.SetBinNames(StringVecify(1, "all"));
+  statsD.IncrementCount(1,0,0,702259);
+  statsD.IncrementCount(1,0,1,135967);
   statsD.Print();
 
 
   LatexTable table;
-  table.AddYieldStats("Z+b",stats);
-  table.AddYieldStats("Data",statsD);
-  //table.RestrictToRunRange(2000,3000);
-  //std::vector<std::string> splits;
-  //splits.push_back("split2");
-  //table.CombineSplitsByName(splits);
+  table.AddYieldStats(stats,0,1557370,135.3);
+  table.AddYieldStats(statsC,0,8606279,748.1);
+  table.AddYieldStats(statsD,1,21180497);
+  table.SetTargetLumi(2130);
+  table.SetCaptionBegin("Double Electron");
   table.MakeTable();
 
   return 0;

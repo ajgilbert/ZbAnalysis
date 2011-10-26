@@ -24,6 +24,7 @@ namespace HbbAnalysis {//namespace
     //Getters
     std::vector<std::string> GetStepNames() const;
     std::vector<std::string> GetBinNames() const;
+    std::string GetSampleName() const { return sampleName_; }
 
     void IncrementCount(unsigned run, unsigned binIndex, unsigned stepIndex,  double value);
     void IncrementCount(unsigned run, std::string binName, std::string stepName, double value);

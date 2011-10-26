@@ -15,62 +15,66 @@ namespace HbbAnalysis {//namespace
 
   public:
     ~LatexTable(){;}
-    LatexTable(){
-      runRestricted_ = false;
-      startRun_ = 0;
-      endRun_ = 0;
-      splitRestricted_ = false;
+    LatexTable();
+
+    void RestrictToRunRange(bool arg)     { restrictToRunRange_   = arg; }
+    void SpecifyBinsToSum(bool arg)       { specifyBinsToSum_     = arg; }
+    void ShowSumMcColumn(bool arg)        { showSumMcColumn_      = arg; }
+    void SpecifySteps(bool arg)           { specifySteps_         = arg; }
+    void ShowInitialYields(bool arg)      { showInitialYields_    = arg; }
+    void ShowEfficiencyErrors(bool arg)   { showEfficiencyErrors_ = arg; }
+    void ScaleMc(bool arg)                { scaleMc_              = arg; }
+
+    void AddYieldStats(YieldStats & yieldStats, bool isData);
+    void AddYieldStats(YieldStats & yieldStats, bool isData, double nInitial);
+    void AddYieldStats(YieldStats & yieldStats, bool isData, double nInitial, double xs);
+
+
+    void SetRunRange(unsigned startRun, unsigned endRun) {
+      startRun_ = startRun;
+      endRun_ = endRun;
     }
-    void AddYieldStats(std::string name, YieldStats & yieldStats);
-    void MakeTable();
-    void RestrictToRun(unsigned run);
-    void RestrictToRunRange(unsigned startRun, unsigned endRun);
-    void CombineSplitsByName(std::vector<std::string> splitNames);
-    void CombineAllSplits();
+    void SetBinsToSum(std::vector<std::string> const& binNames) {
+      binsToSum_ = binNames;
+    }
+    void SetStepsToShow(std::vector<std::string> const& stepNames) { 
+      stepsToShow_ = stepNames;
+    }
+    void SetTargetLumi(double lumi){
+      targetLumi_ = lumi;
+    }
+    void SetCaptionBegin(std::string captionBegin){
+      captionBegin_ = captionBegin;
+    }
 
-
-
-    /*
-    void InitialiseStepNames(unsigned, ... );
-    void InitialiseSplitNames(std::vector<std::string> const& splitNames);
-    void InitialiseSplitNames(unsigned numArgs, ... );
-    void IncrementCount(unsigned run, std::string stepName, std::string splitName, double value);
-    void IncrementCount(unsigned run, unsigned stepIndex, unsigned splitIndex,  double value);
-
-    void PrintMap();
-    */
     
-
+    void MakeTable();
 
   private:
+    //Flags to control the design of the table
+    bool restrictToRunRange_;
+    bool specifyBinsToSum_;
+    bool showSumMcColumn_;
+    bool specifySteps_;
+    bool showInitialYields_;
+    bool showEfficiencyErrors_;
+    bool scaleMc_;
+    
+    //Data used when checking above flags
     unsigned startRun_;
     unsigned endRun_;
-    bool runRestricted_;
+    std::vector<std::string> binsToSum_;
+    std::map<std::string, bool> isDataMap_;
+    std::vector<std::string> stepsToShow_;
+    std::map<std::string, double> initialYieldsMap_;
+    std::map<std::string, double> crossSectionMap_;
+    double targetLumi_;
+    std::string captionBegin_;
 
-    std::vector<std::string> selectedSplits_;
-    bool splitRestricted_;
-    
     //A vector to maintain the order in which the yield maps are added 
     std::vector<std::string> yieldStatsNames_;
     //Map give YieldMap pointer from the name
     std::map<std::string, YieldStats*> yieldStatsMap_;
-
-    /*
-    std::string sampleName_;
-    std::string yieldName_;
-    std::vector<double> yieldVector_;
-    std::vector<std::string> stepNames_;
-    std::vector<std::string> splitNames_;
-
-    std::map<std::string,unsigned> stepIndexMap_;
-    std::map<std::string,unsigned> splitIndexMap_;
-    std::map<unsigned, unsigned> runIndexMap_;
-
-    void BuildStepIndexMap();
-    void BuildSplitIndexMap();
-    */
-    
-
   };
   
 }//namespace
