@@ -5,7 +5,7 @@
 #include <vector>
 #include <string>
 #include <map>
-#include "YieldStats.hh"
+#include "UserCode/HbbAnalysis/interface/YieldStats.hh"
 
 namespace HbbAnalysis {//namespace
 
@@ -48,7 +48,7 @@ namespace HbbAnalysis {//namespace
     }
 
     
-    void MakeTable();
+    void MakeTable(std::ostream &);
 
   private:
     //Flags to control the design of the table

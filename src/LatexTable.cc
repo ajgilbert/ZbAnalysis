@@ -1,5 +1,5 @@
 #include "LatexTable.hh"
-#include "YieldStats.hh"
+#include "UserCode/HbbAnalysis/interface/YieldStats.hh"
 #include "TEfficiency.h"
 #include <stdarg.h>
 #include <iostream>
@@ -46,36 +46,41 @@ namespace HbbAnalysis {//namespace
     crossSectionMap_[yieldStats.GetSampleName()] = xs;
 }
 
-  void LatexTable::MakeTable(){ 
+  void LatexTable::MakeTable(std::ostream & out){ 
    TEfficiency eff;
 
     //Determine the number of samples
     unsigned nSamples = yieldStatsNames_.size();
     
-    //For now take list of steps from the first yieldStats object added
+    //If flag is set, get user defined step names, else take the steps from the first YieldStats
+    //object passed to the LatexTable
     std::vector<std::string> stepNames;  
-    if (nSamples > 0) {
-      stepNames = yieldStatsMap_[yieldStatsNames_[0]]->GetStepNames();
+    if (specifySteps_) {
+      stepNames = stepsToShow_;
+    } else {
+      if (nSamples > 0) {
+        stepNames = yieldStatsMap_[yieldStatsNames_[0]]->GetStepNames();
+      }
     }
   
     //Print start boilerplate:
-    std::cout << "\\begin{table}" << std::endl;
-    std::cout << "{\\" << std::endl;
-    std::cout << "\\caption{";
+    out << "\\begin{table}" << std::endl;
+    out << "{\\" << std::endl;
+    out << "\\caption{";
     if (captionBegin_ == "") {
-      std::cout << "Yields for ";
+      out << "Yields for ";
     } else {
-      std::cout << captionBegin_ << " yields for ";
+      out << captionBegin_ << " yields for ";
     }
-    std::cout << targetLumi_ << " $\\mathrm{pb^{-1}}$ of data.";
-    std::cout << "}" << std::endl;
-    std::cout << "\\begin{tabular}{|l";
+    out << targetLumi_ << " $\\mathrm{pb^{-1}}$ of data.";
+    out << "}" << std::endl;
+    out << "\\begin{tabular}{|l";
 
     //Specify the desired number of columns
-    for (unsigned i = 0; i < nSamples; ++i) std::cout << "|c";
+    for (unsigned i = 0; i < nSamples; ++i) out << "|c";
     //Add an additional column if showSumMcColumn is set
-    if (showSumMcColumn_) std::cout << "|c";
-    std::cout << "|}" << std::endl;
+    if (showSumMcColumn_) out << "|c";
+    out << "|}" << std::endl;
 
     //Find last MC sample, or if none found, the last sample
     unsigned SumMcColumnIdx = nSamples - 1;
@@ -84,25 +89,25 @@ namespace HbbAnalysis {//namespace
     }
 
     //hline for the top of the table
-    std::cout << "\\hline" << std::endl;
+    out << "\\hline" << std::endl;
 
     //Print the sample names row
-    std::cout << "Step "; 
+    out << "Step "; 
     for (unsigned i = 0; i < nSamples; ++i) {
-      std::cout << "& " << yieldStatsNames_[i] << " ";
-    if (showSumMcColumn_ && i == SumMcColumnIdx) std::cout << "& Sum MC ";
+      out << "& " << yieldStatsNames_[i] << " ";
+    if (showSumMcColumn_ && i == SumMcColumnIdx) out << "& Sum MC ";
     }
-    std::cout << "\\\\" << std::endl;
+    out << "\\\\" << std::endl;
 
     //hline under sample names row
-    std::cout << "\\hline" << std::endl;
+    out << "\\hline" << std::endl;
 
     //Loop through steps
     for (unsigned i = 0; i < stepNames.size(); ++i){
       double sumMC = 0.0;
       double sumMCErrSq = 0.0;
 
-      std::cout << stepNames[i] << " ";
+      out << stepNames[i] << " ";
       for (unsigned j = 0; j < nSamples; ++j) {
         double count = 0.0;
         //Based on whether there is run or bin filtering, get the yield
@@ -147,25 +152,25 @@ namespace HbbAnalysis {//namespace
         error *= sf;
         sumMC += count;
         sumMCErrSq += (error*error);
-        std::cout << "& $" << std::fixed << std::setprecision(0) << count;
-        if (showEfficiencyErrors_) std::cout << "\\pm " << error;
-        std::cout << "$ ";
+        out << "& $" << std::fixed << std::setprecision(0) << count;
+        if (showEfficiencyErrors_) out << "\\pm " << error;
+        out << "$ ";
 
         if (showSumMcColumn_ && j == SumMcColumnIdx){
-          std::cout << "& $" << sumMC;
-          if (showEfficiencyErrors_) std::cout << "\\pm " << sqrt(sumMCErrSq);
-          std::cout << "$ ";
+          out << "& $" << sumMC;
+          if (showEfficiencyErrors_) out << "\\pm " << sqrt(sumMCErrSq);
+          out << "$ ";
         }
       }//Loop through samples
-      std::cout << "\\\\" << std::endl;
+      out << "\\\\" << std::endl;
 
     }
-    std::cout << "\\hline" << std::endl;
+    out << "\\hline" << std::endl;
 
     //Print end boilerplate:
-    std::cout << "\\end{tabular}" << std::endl;
-    std::cout << "}" << std::endl;
-    std::cout << "\\end{table}" << std::endl;
+    out << "\\end{tabular}" << std::endl;
+    out << "}" << std::endl;
+    out << "\\end{table}" << std::endl;
 
     
 
