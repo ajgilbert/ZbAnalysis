@@ -28,9 +28,6 @@ namespace HbbAnalysis {//namespace
     return (*object_ptr);
   }
 
-
- 
-
 }//namespace
 
 #endif //HbbAnalysis_SaveAsTree_hh
