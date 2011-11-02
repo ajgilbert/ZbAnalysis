@@ -14,4 +14,16 @@ namespace HbbAnalysis {
     }
     return vec;
   }
+
+template <class T>
+std::vector<T> Vecify(unsigned numArgs, ... ) {
+    std::vector<T> vec;
+    vec.resize(numArgs);
+    va_list listPointer;
+    va_start(listPointer, numArgs);
+    for (unsigned i = 0; i < numArgs; ++i){
+      vec[i] = (T(va_arg(listPointer,T))); 
+    }
+    return vec;
+  }
 }

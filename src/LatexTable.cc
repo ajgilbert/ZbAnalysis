@@ -111,7 +111,7 @@ namespace HbbAnalysis {//namespace
       for (unsigned j = 0; j < nSamples; ++j) {
         double count = 0.0;
         //Based on whether there is run or bin filtering, get the yield
-        if (restrictToRunRange_) {
+        if (restrictToRunRange_ && isDataMap_[yieldStatsNames_[j]]) {
           if (specifyBinsToSum_) {
             count = yieldStatsMap_[yieldStatsNames_[j]]->CalculateYield(stepNames[i], startRun_, endRun_, binsToSum_);
           } else {
