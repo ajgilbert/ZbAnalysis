@@ -18,6 +18,7 @@ namespace HbbAnalysis {//namespace
     showInitialYields_    = true;
     showEfficiencyErrors_ = true;
     scaleMc_              = true;
+    showDataMcRatioColumn_ = true;
     //Set other sensible defaults
     startRun_ = 0;
     endRun_ = std::numeric_limits<unsigned>::max();
@@ -65,7 +66,7 @@ namespace HbbAnalysis {//namespace
   
     //Print start boilerplate:
     out << "\\begin{table}" << std::endl;
-    out << "{\\" << std::endl;
+    out << "{\\tiny" << std::endl;
     out << "\\caption{";
     if (captionBegin_ == "") {
       out << "Yields for ";
@@ -80,6 +81,7 @@ namespace HbbAnalysis {//namespace
     for (unsigned i = 0; i < nSamples; ++i) out << "|c";
     //Add an additional column if showSumMcColumn is set
     if (showSumMcColumn_) out << "|c";
+    if (showDataMcRatioColumn_) out << "|c";
     out << "|}" << std::endl;
 
     //Find last MC sample, or if none found, the last sample
@@ -97,6 +99,7 @@ namespace HbbAnalysis {//namespace
       out << "& " << yieldStatsNames_[i] << " ";
     if (showSumMcColumn_ && i == SumMcColumnIdx) out << "& Sum MC ";
     }
+    if (showDataMcRatioColumn_) out << "& Data/MC ";
     out << "\\\\" << std::endl;
 
     //hline under sample names row
@@ -104,35 +107,48 @@ namespace HbbAnalysis {//namespace
 
     //Loop through steps
     for (unsigned i = 0; i < stepNames.size(); ++i){
+      std::string stepName = stepNames[i]; 
       double sumMC = 0.0;
       double sumMCErrSq = 0.0;
+      double sumData = 0.0;
+      double sumDataErrSq = 0.0;
 
-      out << stepNames[i] << " ";
+      if (renameMap_.count(stepNames[i]) != 0) {
+        out << renameMap_[stepNames[i]] << " ";
+      } else {
+        out << stepNames[i] << " ";
+      }
       for (unsigned j = 0; j < nSamples; ++j) {
+        std::string sampleName = yieldStatsNames_[j];
+        std::string stepNameToUse = stepName;
         double count = 0.0;
+        if (!yieldStatsMap_[sampleName]->HasStep(stepName)){
+          if (i > 0) stepNameToUse = stepNames[i-1];
+        }
+
         //Based on whether there is run or bin filtering, get the yield
-        if (restrictToRunRange_ && isDataMap_[yieldStatsNames_[j]]) {
+        if (restrictToRunRange_ && isDataMap_[sampleName]) {
           if (specifyBinsToSum_) {
-            count = yieldStatsMap_[yieldStatsNames_[j]]->CalculateYield(stepNames[i], startRun_, endRun_, binsToSum_);
+            count = yieldStatsMap_[sampleName]->CalculateYield(stepNameToUse, startRun_, endRun_, binsToSum_);
           } else {
-            count = yieldStatsMap_[yieldStatsNames_[j]]->CalculateYield(stepNames[i], startRun_, endRun_);
+            count = yieldStatsMap_[sampleName]->CalculateYield(stepNameToUse, startRun_, endRun_);
           }
         } else {
           if (specifyBinsToSum_){
-            count = yieldStatsMap_[yieldStatsNames_[j]]->CalculateYield(stepNames[i], binsToSum_);
+            count = yieldStatsMap_[sampleName]->CalculateYield(stepNameToUse, binsToSum_);
           } else {
-            count = yieldStatsMap_[yieldStatsNames_[j]]->CalculateYield(stepNames[i]);
+            count = yieldStatsMap_[sampleName]->CalculateYield(stepNameToUse);
           }
         }
         //Now the yield is obtained
         double error = 0.0;
         double sf = 1.0;
         if (showEfficiencyErrors_) {
-          if (isDataMap_[yieldStatsNames_[j]]) {
+          if (isDataMap_[sampleName]) {
             error = sqrt(count);
           } else {
-            if (initialYieldsMap_.count(yieldStatsNames_[j]) != 0) {
-              double init = initialYieldsMap_[yieldStatsNames_[j]];
+            if (initialYieldsMap_.count(sampleName) != 0) {
+              double init = initialYieldsMap_[sampleName];
               if (init >= count) {
                 error = (eff.ClopperPearson(init+0.5,count+0.5,0.683 ,1)*init)-count;
               }//If numerator is less than denominator
@@ -140,18 +156,25 @@ namespace HbbAnalysis {//namespace
           }
         }//If showEfficiencyErrors flag is set
         
-        if (scaleMc_ && !isDataMap_[yieldStatsNames_[j]]) {
-          if (targetLumi_ > 0 && crossSectionMap_.count(yieldStatsNames_[j]) != 0
-              && initialYieldsMap_.count(yieldStatsNames_[j]) != 0) {
-            sf = (crossSectionMap_[yieldStatsNames_[j]] * targetLumi_) 
-              / initialYieldsMap_[yieldStatsNames_[j]];
+        if (scaleMc_ && !isDataMap_[sampleName]) {
+          if (targetLumi_ > 0 && crossSectionMap_.count(sampleName) != 0
+              && initialYieldsMap_.count(sampleName) != 0) {
+            sf = (crossSectionMap_[sampleName] * targetLumi_) 
+              / initialYieldsMap_[sampleName];
           }//If we have a cross-section, initial yield and target lumi
         }//If scaleMc flag is set and the sample is actually MC
 
         count *= sf;
         error *= sf;
-        sumMC += count;
-        sumMCErrSq += (error*error);
+
+        if (!isDataMap_[sampleName]) {
+          sumMC += count;
+          sumMCErrSq += (error*error);
+        } else {
+          sumData += count;
+          sumDataErrSq += (error*error);
+        }
+
         out << "& $" << std::fixed << std::setprecision(0) << count;
         if (showEfficiencyErrors_) out << "\\pm " << error;
         out << "$ ";
@@ -162,6 +185,13 @@ namespace HbbAnalysis {//namespace
           out << "$ ";
         }
       }//Loop through samples
+      if (showDataMcRatioColumn_){
+        double ratio = sumData/sumMC;
+        double ratioErr = ratio*sqrt( (sumMCErrSq/(sumMC*sumMC)) + (sumDataErrSq)/(sumData*sumData) );
+          out << "& $" << std::fixed << std::setprecision(2) << (ratio);
+          if (showEfficiencyErrors_) out << "\\pm " << ratioErr;
+          out << "$ ";
+      }
       out << "\\\\" << std::endl;
 
     }

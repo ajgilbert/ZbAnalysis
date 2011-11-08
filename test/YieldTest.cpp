@@ -22,39 +22,17 @@ int main(int argc, char* argv[]){
   gSystem->Load("libUserCodeHbbAnalysis.so");
   AutoLibraryLoader::enable();
 
-  std::cout << "Hello World!" << std::endl;
   std::cout << "Arguments passed to program: " << argc << std::endl;
   for (int i = 0; i < argc; ++i){
     std::cout << i << "\t" << argv[i] << std::endl;
   }
-/*
-  YieldStats stats("Z+b","NO_RW");
-  stats.SetStepNames(StringVecify(4,"Lepton Pair","Jet ID","1 SSVHE Tag","2 SSVHE Tags"));
-  stats.SetBinNames(StringVecify(1, "all"));
-  stats.IncrementCount(1,0,0,202011);
-  stats.IncrementCount(1,0,1,55868);
-  stats.IncrementCount(1,0,2,1434);
-  stats.IncrementCount(1,0,3,4);
-  stats.Print();
 
-  YieldStats statsC("Z+c","NO_RW");
-  statsC.SetStepNames(StringVecify(4,"Lepton Pair","Jet ID","1 SSVHE Tag","2 SSVHE Tags"));
-  statsC.SetBinNames(StringVecify(1, "all"));
-  statsC.IncrementCount(1,0,0,933108);
-  statsC.IncrementCount(1,0,1,204167);
-  statsC.IncrementCount(1,0,2,3427);
-  statsC.IncrementCount(1,0,3,32);
-  statsC.Print();
+  if (argc != 2) return 0;
+  std::string flav = argv[1];
+  std::string altflav;
+  if (flav == "ee") altflav = "El";
+  if (flav == "mm") altflav = "Mu";
   
-  YieldStats statsD("Data","NO_RW");
-  statsD.SetStepNames(StringVecify(4,"Lepton Pair","Jet ID","1 SSVHE Tag","2 SSVHE Tags"));
-  statsD.SetBinNames(StringVecify(1, "all"));
-  statsD.IncrementCount(1,0,0,702259);
-  statsD.IncrementCount(1,0,1,135967);
-  statsD.IncrementCount(1,0,2,100);
-  statsD.IncrementCount(1,0,3,1);
-  statsD.Print();
-  */
   unsigned nMC = 7;
 
   vector<string> samplePathsMC = StringVecify(nMC,
@@ -92,17 +70,30 @@ int main(int argc, char* argv[]){
       3048.0,
       3048.0,
       3048.0);
+  
+  vector<string> outputFiles = StringVecify(8,
+      "Main_Yields.tex",
+      "LowPU_Yields.tex",
+      "MedPU_Yields.tex",
+      "HighPU_Yields.tex",
+      "May10_Yields.tex", 
+      "PromptV4_Yields.tex",
+      "Aug05_Yields.tex",
+      "PromptV6_Yields.tex");
 
 
+  
   ofstream outFile;
-  outFile.open("YieldTable.tex");
+  for (unsigned i = 0; i < outputFiles.size();++i){
+    outputFiles[i] = flav + "_" + outputFiles[i];
+  }
   LatexTable table;
 
 
-  string samplePathData = "/data/Zb/DoubleMu/4_2_4/Combined/";
-  TFile* f = new TFile(((samplePathData + "YieldStats_mm.root").c_str()));
+  string samplePathData = "/data/Zb/Double"+altflav+"/4_2_4/Combined/";
+  TFile* f = new TFile(((samplePathData + "YieldStats_"+flav+".root").c_str()));
   if (!f) {
-    std::cerr << "File Not Found: " << (samplePathData + "YieldStats_mm.root");
+    std::cerr << "File Not Found: " << (samplePathData + "YieldStats_"+flav+".root");
   }
 
   YieldStats yieldsData = LoadViaTree<YieldStats>(*f,"PU_TP_BTAG_RW");
@@ -112,38 +103,106 @@ int main(int argc, char* argv[]){
 
   vector<YieldStats> yieldsMC;
   for (unsigned i = 0; i < nMC; ++i){
-    TFile *f = new TFile(((samplePathsMC[i] + "YieldStats_mm.root").c_str()));
+    TFile *f = new TFile(((samplePathsMC[i] + "YieldStats_"+flav+".root").c_str()));
   if (!f) {
-    std::cerr << "File Not Found: " << (samplePathsMC[i] + "YieldStats_mm.root");
+    std::cerr << "File Not Found: " << (samplePathsMC[i] + "YieldStats_"+flav+".root");
   }
-    yieldsMC.push_back(LoadViaTree<YieldStats>(*f,"PU_TP_RW"));
+    yieldsMC.push_back(LoadViaTree<YieldStats>(*f,"PU_TP_BTAG_RW"));
     yieldsMC.at(i).SetSampleName(sampleNamesMC[i]);
     f->Close();
   }
   
   for (unsigned i = 0; i < nMC; ++i){
-    std::cout << initialMC[i] << std::endl;
     table.AddYieldStats(yieldsMC.at(i), 0, initialMC[i], xsMC[i]);
   }
+
   table.AddYieldStats(yieldsData, 1);
   table.SpecifySteps(true);
-  table.SetStepsToShow(StringVecify(6,"lep_pair","lep_trigmatch","jet_pteta","jet_btag_HE","jet_btag_exclusive_HE", "jet_2btag_HE"));
-  table.SetCaptionBegin("Double Muon");
-  LatexTable table2 = table;
+  table.SetStepsToShow(StringVecify(9,"lep_pair","lep_trigmatch","jet_pteta","jet_btag_HE","jet_btag_exclusive_HE", "jet_2btag_HE","jet_btag_HP","jet_btag_exclusive_HP", "jet_2btag_HP"));
+  table.SetStepRename("lep_pair","Lept. Pair");
+  table.SetStepRename("lep_trigmatch","Trig. Match");
+  table.SetStepRename("jet_pteta","Jet $\\mathrm{p_{T}}$,$\\eta$");
+  table.SetStepRename("jet_btag_HE","$\\geq 1$ b-Tag HE");
+  table.SetStepRename("jet_btag_exclusive_HE","$= 1$ b-Tag HE");
+  table.SetStepRename("jet_2btag_HE","$\\geq 2$ b-Tag HE");
+  table.SetStepRename("jet_btag_HP","$\\geq 1$ b-Tag HP");
+  table.SetStepRename("jet_btag_exclusive_HP","$= 1$ b-Tag HP");
+  table.SetStepRename("jet_2btag_HP","$\\geq 2$ b-Tag HP");
+  if (flav == "ee") table.SetCaptionBegin("Double Electron");
+  if (flav == "mm") table.SetCaptionBegin("Double Muon");
 
   table.SetTargetLumi(2111);
-  //table.RestrictToRunRange(true);
-  //table.SetRunRange(0,168437);
-  table2.SetTargetLumi(970);
-  table2.RestrictToRunRange(true);
-  table2.SetRunRange(168438,1000000);
-  //table.ScaleMc(false);
+  table.ScaleMc(false);
   //table.SpecifyBinsToSum(true);
   //table.SetBinsToSum(StringVecify(1,"low_pu"));
 
-  table.MakeTable(std::cout);
-  table2.MakeTable(std::cout);
+  outFile.open(outputFiles[0].c_str());
+  table.MakeTable(outFile);
   outFile.close();
+
+  LatexTable table_lowpu = table;
+  table_lowpu.SpecifyBinsToSum(true);
+  table_lowpu.SetBinsToSum(StringVecify(1,"low_pu"));
+
+  LatexTable table_medpu = table;
+  table_medpu.SpecifyBinsToSum(true);
+  table_medpu.SetBinsToSum(StringVecify(1,"med_pu"));
+
+  LatexTable table_highpu = table;
+  table_highpu.SpecifyBinsToSum(true);
+  table_highpu.SetBinsToSum(StringVecify(1,"high_pu"));
+
+  outFile.open(outputFiles[1].c_str());
+  table_lowpu.MakeTable(outFile);
+  outFile.close();
+  outFile.open(outputFiles[2].c_str());
+  table_medpu.MakeTable(outFile);
+  outFile.close();
+  outFile.open(outputFiles[3].c_str());
+  table_highpu.MakeTable(outFile);
+  outFile.close();
+
+  LatexTable table_may10 = table;
+  table_may10.RestrictToRunRange(true);
+  table_may10.SetRunRange(0,163869);
+  table_may10.SetTargetLumi(215);
+
+  LatexTable table_prv4 = table;
+  table_prv4.RestrictToRunRange(true);
+  table_prv4.SetRunRange(163870,170825);
+  table_prv4.SetTargetLumi(926);
+
+  LatexTable table_aug05 = table;
+  table_aug05.RestrictToRunRange(true);
+  table_aug05.SetRunRange(170826,172619);
+  table_aug05.SetTargetLumi(316);
+
+  LatexTable table_prv6 = table;
+  table_prv6.RestrictToRunRange(true);
+  table_prv6.SetRunRange(172620,1000000);
+  table_prv6.SetTargetLumi(654);
+  
+  outFile.open(outputFiles[4].c_str());
+  table_may10.MakeTable(outFile);
+  outFile.close();
+
+  outFile.open(outputFiles[5].c_str());
+  table_prv4.MakeTable(outFile);
+  outFile.close();
+
+  outFile.open(outputFiles[6].c_str());
+  table_aug05.MakeTable(outFile);
+  outFile.close();
+
+  outFile.open(outputFiles[7].c_str());
+  table_prv6.MakeTable(outFile);
+  outFile.close();
+
+
+
+
+
+  //table2.MakeTable(std::cout);
 
   return 0;
 }
