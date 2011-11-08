@@ -17,13 +17,14 @@ namespace HbbAnalysis {//namespace
     ~LatexTable(){;}
     LatexTable();
 
-    void RestrictToRunRange(bool arg)     { restrictToRunRange_   = arg; }
-    void SpecifyBinsToSum(bool arg)       { specifyBinsToSum_     = arg; }
-    void ShowSumMcColumn(bool arg)        { showSumMcColumn_      = arg; }
-    void SpecifySteps(bool arg)           { specifySteps_         = arg; }
-    void ShowInitialYields(bool arg)      { showInitialYields_    = arg; }
-    void ShowEfficiencyErrors(bool arg)   { showEfficiencyErrors_ = arg; }
-    void ScaleMc(bool arg)                { scaleMc_              = arg; }
+    void RestrictToRunRange(bool arg)     { restrictToRunRange_    = arg; }
+    void SpecifyBinsToSum(bool arg)       { specifyBinsToSum_      = arg; }
+    void ShowSumMcColumn(bool arg)        { showSumMcColumn_       = arg; }
+    void SpecifySteps(bool arg)           { specifySteps_          = arg; }
+    void ShowInitialYields(bool arg)      { showInitialYields_     = arg; }
+    void ShowEfficiencyErrors(bool arg)   { showEfficiencyErrors_  = arg; }
+    void ScaleMc(bool arg)                { scaleMc_               = arg; }
+    void ShowDataMcRatioColumn(bool arg)  { showDataMcRatioColumn_ = arg; }
 
     void AddYieldStats(YieldStats & yieldStats, bool isData);
     void AddYieldStats(YieldStats & yieldStats, bool isData, double nInitial);
@@ -46,7 +47,9 @@ namespace HbbAnalysis {//namespace
     void SetCaptionBegin(std::string captionBegin){
       captionBegin_ = captionBegin;
     }
-
+    void SetStepRename(std::string currentName, std::string newName){
+      renameMap_[currentName] = newName;
+    }
     
     void MakeTable(std::ostream &);
 
@@ -55,6 +58,7 @@ namespace HbbAnalysis {//namespace
     bool restrictToRunRange_;
     bool specifyBinsToSum_;
     bool showSumMcColumn_;
+    bool showDataMcRatioColumn_;
     bool specifySteps_;
     bool showInitialYields_;
     bool showEfficiencyErrors_;
@@ -70,6 +74,7 @@ namespace HbbAnalysis {//namespace
     std::map<std::string, double> crossSectionMap_;
     double targetLumi_;
     std::string captionBegin_;
+    std::map<std::string,std::string> renameMap_;
 
     //A vector to maintain the order in which the yield maps are added 
     std::vector<std::string> yieldStatsNames_;
