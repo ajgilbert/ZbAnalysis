@@ -14,9 +14,9 @@ USERLIBS += $(shell root-config --glibs)
 
 USERLIBS += -L$(CMSSW_BASE)/lib/$(SCRAM_ARCH) -lUserCodeHbbAnalysis
 #BOOST REGEX FOR 4_2_4:
-USERLIBS += -L$(CMS_PATH)/$(SCRAM_ARCH)/external/boost/1.44.0-cms/lib/ -lboost_regex
+#USERLIBS += -L$(CMS_PATH)/$(SCRAM_ARCH)/external/boost/1.44.0-cms/lib/ -lboost_regex
 #BOOST REGEX FOR 4_4_0:
-#USERLIBS += -L$(CMS_PATH)/$(SCRAM_ARCH)/external/boost/1.45.0-cms3/lib/ -lboost_regex
+USERLIBS += -L$(CMS_PATH)/$(SCRAM_ARCH)/external/boost/1.45.0-cms3/lib/ -lboost_regex
 
 
 USERLIBS += -L$(CMSSW_RELEASE_BASE)/lib/$(SCRAM_ARCH) -lFWCoreFWLite
