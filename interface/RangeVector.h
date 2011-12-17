@@ -31,6 +31,8 @@ class RangeVector{
     double GetWidth(unsigned);
     int GetBin(double);
 
+  
+
 
 };
 

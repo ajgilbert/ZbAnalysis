@@ -5,8 +5,25 @@
 #include "TFile.h"
 #include "TTree.h"
 #include "BranchHandler.h"
+#include "/Users/Andrew/Code/ZbAnalysis/interface/LatexTable.hh"
 
 using ZbAnalysis::BranchHandler;
+
+class dummyclass {
+
+public:
+  dummyclass() {
+    x = 1;
+  }
+  
+  double GetX(){
+    return x;
+  }
+  
+private:
+  double x;
+  
+};
 
 int main(int argc, char* argv[]){
 
@@ -34,6 +51,9 @@ int main(int argc, char* argv[]){
   }
 
   f.Close();
+  HbbAnalysis::LatexTable abc;
+  
+
   
   return 0;
 }

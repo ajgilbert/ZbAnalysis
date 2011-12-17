@@ -28,6 +28,5 @@ int main(int argc, char* argv[]){
         boost::bind(&p_d_d::first, _1), 
         boost::bind(&p_d_d::second, _1)));
 
-
   return 0;
 }

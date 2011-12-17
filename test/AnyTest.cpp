@@ -3,6 +3,7 @@
 #include <vector>
 #include <string>
 #include <map>
+#include <cxxabi.h>
 
 #include "boost/any.hpp"
 #include "TLorentzVector.h"
@@ -48,6 +49,13 @@ int main(int argc, char* argv[]){
     std::cout << i << "\t" << argv[i] << std::endl;
   }
 
+  int status;
+  boost::any abc = std::vector<TLorentzVector*>();
+  std::string realname = abi::__cxa_demangle(abc.type().name(), 0, 0, &status);
+  
+  std::cout << abc.type().name() << std::endl;
+  std::cout << realname << std::endl;
+  std::cout << status << std::endl;
 
   AnyMap anyMap;
   
