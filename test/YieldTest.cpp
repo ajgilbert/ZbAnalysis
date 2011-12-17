@@ -9,6 +9,7 @@
 #include "LatexTable.hh"
 #include "MiscFunctions.hh"
 #include "UserCode/HbbAnalysis/ZbbSel/interface/TTreeStorage.hh"
+#include "UserCode/HbbAnalysis/ZbbSel/interface/TTreeStorage.hh"
 #include "TFile.h"
 #include "TSystem.h"
 #include "FWCore/FWLite/interface/AutoLibraryLoader.h"
@@ -27,49 +28,62 @@ int main(int argc, char* argv[]){
     std::cout << i << "\t" << argv[i] << std::endl;
   }
 
-  if (argc != 2) return 0;
+  if (argc != 3) return 0;
   std::string flav = argv[1];
+  std::string rw = argv[2];
   std::string altflav;
   if (flav == "ee") altflav = "El";
   if (flav == "mm") altflav = "Mu";
   
-  unsigned nMC = 7;
+  unsigned nMC = 6;
 
   vector<string> samplePathsMC = StringVecify(nMC,
       "/data/Zb/TTJets/4_2_4/S4/TuneZ2/",
       "/data/Zb/ZZ/4_2_4/S4/TuneZ2/",
-      "/data/Zb/WZ/4_2_4/S4/TuneZ2/",
-      "/data/Zb/WW/4_2_4/S4/TuneZ2/",
+      //"/data/Zb/WZ/4_2_4/S4/TuneZ2/",
+      //"/data/Zb/WW/4_2_4/S4/TuneZ2/",
       "/data/Zb/DYJetsToLL/4_2_4/S4/TuneZ2/lFlav/", 
       "/data/Zb/DYJetsToLL/4_2_4/S4/TuneZ2/cFlav/",
-      "/data/Zb/DYJetsToLL/4_2_4/S4/TuneZ2/bFlav/");
+      //"/data/Zb/DYJetsToLL/4_2_4/S4/TuneZ2/bFlav/");
+      //"/data/Zb/ZbbToLL/4_2_4/S4/TuneZ2/");
+      "/data/Zb/ZbbToLL/4_2_4/S4/TuneZ2/",
+      "/data/Zb/ZbbToLL/4_2_4/S4/TuneZ2/");
 
   vector<string> sampleNamesMC = StringVecify(nMC,
       "tt",
       "ZZ",
-      "WZ",
-      "WW",
+      //"WZ",
+      //"WW",
       "Z+l",
       "Z+c",
-      "Z+b");
+      //"Z+b");
+      //"aMC@NLO");
+      "aMC@NLO-P",
+      "aMC@NLO-M");
   
   vector<double> initialMC = Vecify<double>(nMC,
       3701947.,
       4187885.,
-      4265243.,
-      4225916.,
+      //4265243.,
+      //4225916.,
       36277961.,
       36277961.,
-      36277961.);
+      //36277961.);
+      //424080.);
+      424080.,
+      424080.);
 
   vector<double> xsMC = Vecify<double>(nMC,
       157.5,
       6.4,
-      19.79,
-      43.0,
+      //19.79,
+      //43.0,
       3048.0,
       3048.0,
-      3048.0);
+      //3048.0);
+      //16.1);
+      16.1,
+      16.1);
   
   vector<string> outputFiles = StringVecify(8,
       "Main_Yields.tex",
@@ -107,7 +121,13 @@ int main(int argc, char* argv[]){
   if (!f) {
     std::cerr << "File Not Found: " << (samplePathsMC[i] + "YieldStats_"+flav+".root");
   }
-    yieldsMC.push_back(LoadViaTree<YieldStats>(*f,"PU_TP_BTAG_RW"));
+  if (i < 4) {
+    yieldsMC.push_back(LoadViaTree<YieldStats>(*f,rw));
+  } else if (i == 4) {
+    yieldsMC.push_back(LoadViaTree<YieldStats>(*f,"PU_TP_BTAG_RW_PLUS"));
+  } else if (i == 5) {
+    yieldsMC.push_back(LoadViaTree<YieldStats>(*f,"PU_TP_BTAG_RW_MINUS"));
+  }
     yieldsMC.at(i).SetSampleName(sampleNamesMC[i]);
     f->Close();
   }
@@ -118,21 +138,19 @@ int main(int argc, char* argv[]){
 
   table.AddYieldStats(yieldsData, 1);
   table.SpecifySteps(true);
-  table.SetStepsToShow(StringVecify(9,"lep_pair","lep_trigmatch","jet_pteta","jet_btag_HE","jet_btag_exclusive_HE", "jet_2btag_HE","jet_btag_HP","jet_btag_exclusive_HP", "jet_2btag_HP"));
-  table.SetStepRename("lep_pair","Lept. Pair");
-  table.SetStepRename("lep_trigmatch","Trig. Match");
-  table.SetStepRename("jet_pteta","Jet $\\mathrm{p_{T}}$,$\\eta$");
+  table.SetStepsToShow(StringVecify(7,"lep_pair","lep_trigmatch","jet_id","jet_btag_HE", "jet_2btag_HE","jet_btag_HP", "jet_2btag_HP"));
+  table.SetStepRename("lep_pair","Z");
+  table.SetStepRename("lep_trigmatch","Z + Trig. Match");
+  table.SetStepRename("jet_id","Jet $\\mathrm{p_{T}}$,$\\eta$ + ID");
   table.SetStepRename("jet_btag_HE","$\\geq 1$ b-Tag HE");
-  table.SetStepRename("jet_btag_exclusive_HE","$= 1$ b-Tag HE");
   table.SetStepRename("jet_2btag_HE","$\\geq 2$ b-Tag HE");
   table.SetStepRename("jet_btag_HP","$\\geq 1$ b-Tag HP");
-  table.SetStepRename("jet_btag_exclusive_HP","$= 1$ b-Tag HP");
   table.SetStepRename("jet_2btag_HP","$\\geq 2$ b-Tag HP");
   if (flav == "ee") table.SetCaptionBegin("Double Electron");
   if (flav == "mm") table.SetCaptionBegin("Double Muon");
 
   table.SetTargetLumi(2111);
-  table.ScaleMc(false);
+  //table.ScaleMc(false);
   //table.SpecifyBinsToSum(true);
   //table.SetBinsToSum(StringVecify(1,"low_pu"));
 

@@ -6,6 +6,7 @@
 #include <iomanip>
 #include <cmath>
 #include <limits>
+#include "Utilities.hh"
 
 namespace HbbAnalysis {//namespace
       
@@ -150,7 +151,7 @@ namespace HbbAnalysis {//namespace
             if (initialYieldsMap_.count(sampleName) != 0) {
               double init = initialYieldsMap_[sampleName];
               if (init >= count) {
-                error = (eff.ClopperPearson(init+0.5,count+0.5,0.683 ,1)*init)-count;
+                error = (eff.ClopperPearson(std::abs(init+0.5),std::abs(count+0.5),0.683 ,1)*init)-std::abs(count);
               }//If numerator is less than denominator
             }//If an initial yield has been set for this sample
           }
@@ -174,12 +175,23 @@ namespace HbbAnalysis {//namespace
           sumData += count;
           sumDataErrSq += (error*error);
         }
-
+        
         out << "& $" << std::fixed << std::setprecision(0) << count;
         if (showEfficiencyErrors_) out << "\\pm " << error;
         out << "$ ";
+        
+        /*
+        Utilities util(count, error);
+        util.calculate();
+        out << "& " << util.roundedResult() << " ";
+        */
 
         if (showSumMcColumn_ && j == SumMcColumnIdx){
+          /*
+          Utilities util(sumMC, sqrt(sumMCErrSq));
+          util.calculate();
+          out << "& " << util.roundedResult() << " ";
+          */
           out << "& $" << sumMC;
           if (showEfficiencyErrors_) out << "\\pm " << sqrt(sumMCErrSq);
           out << "$ ";
