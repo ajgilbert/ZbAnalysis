@@ -8,10 +8,10 @@
 using namespace std;
 
 void SetStyle(ajg::TH1PlotElement & ele, unsigned color) {
-  ele.marker_color = color;
-  ele.line_color = color;
-  ele.draw_hist = true;
-  ele.draw_stat_error_y = true;
+  ele.set_marker_color(color);
+  ele.set_line_color(color);
+  ele.set_draw_fill(true);
+  ele.set_draw_stat_error_y(true);
   return;
 }
 
@@ -31,14 +31,14 @@ int main(int argc, char* argv[]){
   
   ///
   ajg::TH1PlotElement mc_ele("mc",&mc_file,"/","MC_PU");
-  mc_ele.legend_text = "MC - DYJetsToLL";
+  mc_ele.set_legend_text("MC - DYJetsToLL");
   SetStyle(mc_ele,4);
-  mc_ele.draw_normalised = true;
+  mc_ele.set_draw_normalised(true);
   ///
   ajg::TH1PlotElement data_ele("data",&data_file,"/","pileup2");
-  data_ele.legend_text = "Data";
+  data_ele.set_legend_text("Data");
   SetStyle(data_ele,2);
-  data_ele.draw_normalised = true;
+  data_ele.set_draw_normalised(true);
   ///
   
   test_plot.AddTH1PlotElement(data_ele);
@@ -53,7 +53,7 @@ int main(int argc, char* argv[]){
   
   test_plot.draw_ratio_hist = true;
   ajg::RatioPlotElement ratio("ratio","data","mc");
-  ratio.marker_color = 1;
+  ratio.set_marker_color(1);
   
   test_plot.AddRatioPlotElement(ratio);
   //test_plot.title_left = "Madgraph vs. aMC@NLO";

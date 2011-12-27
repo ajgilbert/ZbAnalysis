@@ -10,19 +10,25 @@
 #include "TPad.h"
 #include <vector>
 #include <iostream>
+#include "TH1PlotElement.h"
+#include "RatioPlotElement.h"
 
 namespace ajg{
 
-
-
       bool Plot::AddTH1PlotElement(ajg::TH1PlotElement element) {
-       if (element_map_.count(element.element_name) == 0) {
+       if (element_map_.count(element.name()) == 0) {
+         if (!element.hist_ptr()) {
+           std::cerr << "Error: Cannot add TH1PlotElement with name \"" <<
+             element.name() << "\", TH1F pointer is null." << std::endl;
+           return false;
+         } else {
          elements_.push_back(element);
-         element_map_[element.element_name] = element;
+         element_map_[element.name()] = element;
+         }
          return true;
        } else {
          std::cerr << "Error: Cannot add TH1PlotElement with name \"" <<
-           element.element_name << "\", name already in use." << std::endl;
+           element.name() << "\", name already in use." << std::endl;
          return false;
        }
       }
@@ -33,19 +39,34 @@ namespace ajg{
       }
       
       int Plot::GeneratePlot() {
+
         SetTdrStyle();
-
-        TLegend leg(0.60,0.80,0.90,0.90,NULL,"brNDC");
-        unsigned n_in_legend = 0;
-
         unsigned n_elements = elements_.size();
+        unsigned n_legend = 0;
+
+        //1st Loop through elements - information gathering
+        for (unsigned i = 0; i < n_elements; ++i) {
+          TH1PlotElement const& ele = elements_[i];
+          //Count number of elements with a legend entry
+          if (ele.legend_text() != "") ++n_legend;
+        }
+
+        //Create a TLegend object, if necessary
+        TLegend *legend = 0;
+        if (n_legend > 0) {
+          //Allow 5% of the Canvas height for each 'row'
+          double legend_y1 = 0.90 - (n_legend * 0.05);
+          legend = new TLegend(0.60,legend_y1,0.90,0.90,"","brNDC");
+        }
+
+
         std::vector<TH1F*> histos;
         histos.resize(n_elements);
         for (unsigned i = 0; i < n_elements; ++i) {
           TH1PlotElement & ele = elements_[i];
-          ele.source_file->cd();
-          gDirectory->cd(ele.hist_path.c_str());
-          histos[i] = dynamic_cast<TH1F*>(gDirectory->Get(ele.hist_name.c_str()));
+          if (ele.hist_ptr()) {
+          histos[i] = ele.hist_ptr();
+          } 
         }
 
         TCanvas* canv = new TCanvas("canv","canv");
@@ -74,34 +95,33 @@ namespace ajg{
               histos[i]->SetBinContent(j,0.0);
           }
           histos[i]->Sumw2();
-          if (!ele.draw_normalised) {
-            histos[i]->Scale(ele.scale_factor);
+          if (!ele.draw_normalised()) {
+            histos[i]->Scale(ele.scale_factor());
           } else {
             histos[i]->Scale(1./histos[i]->Integral());
           }
           
-          histos[i]->Rebin(ele.rebin);
-          histos[i]->SetLineColor(ele.line_color);
-          histos[i]->SetLineWidth(ele.line_width);
-          histos[i]->SetLineStyle(ele.line_style);
-          histos[i]->SetMarkerColor(ele.marker_color);
-          histos[i]->SetMarkerSize(ele.marker_size);
-          histos[i]->SetMarkerStyle(ele.marker_style);
-          histos[i]->SetFillColor(ele.fill_color);
-          histos[i]->SetFillStyle(ele.fill_style);
-          histos[i]->SetStats(true);
+          histos[i]->Rebin(ele.rebin_factor());
+          histos[i]->SetLineColor(ele.line_color());
+          histos[i]->SetLineWidth(ele.line_width());
+          histos[i]->SetLineStyle(ele.line_style());
+          histos[i]->SetMarkerColor(ele.marker_color());
+          histos[i]->SetMarkerSize(ele.marker_size());
+          histos[i]->SetMarkerStyle(ele.marker_style());
+          histos[i]->SetFillColor(ele.fill_color());
+          histos[i]->SetFillStyle(ele.fill_style());
+          histos[i]->SetStats(false);
           
-          if (ele.legend_text != ""){
-            ++n_in_legend;
+          if (ele.legend_text() != ""){
             std::string leg_options = "";
-            if (ele.draw_hist) leg_options += "fl";
-            if (ele.draw_marker || ele.draw_stat_error_y) leg_options += "p";
-            leg.AddEntry(histos[i],ele.legend_text.c_str(),leg_options.c_str());
+            if (ele.draw_fill()) leg_options += "fl";
+            if (ele.draw_marker() || ele.draw_stat_error_y()) leg_options += "p";
+            legend->AddEntry(histos[i],ele.legend_text().c_str(),leg_options.c_str());
           }
           std::string draw_options = "";
-          if (ele.draw_hist) draw_options += "HIST";
-          if (ele.draw_marker) draw_options += "P";
-          if (ele.draw_stat_error_y) draw_options += "E1";
+          if (ele.draw_fill()) draw_options += "HIST";
+          if (ele.draw_marker()) draw_options += "P";
+          if (ele.draw_stat_error_y()) draw_options += "E1";
 
 
           for (int j = 0; j < histos[i]->GetNbinsX(); ++j) {
@@ -124,35 +144,46 @@ namespace ajg{
 
           if (i == 0) {
             histos[i]->GetXaxis()->SetTitle(x_axis_title.c_str());
+            std::cout << "Title Font: " << histos[i]->GetXaxis()->GetTitleFont() <<
+              std::endl;
+            std::cout << gStyle->GetTitleFont() << std::endl;
               if (x_axis_min > 0 && x_axis_max > 0){
                 histos[i]->GetXaxis()->SetRangeUser(x_axis_min,x_axis_max);
               }
-            //histos[i]->GetXaxis()->SetLabelSize(0.0);
-            //histos[i]->GetXaxis()->SetTitleSize(0.0);
-            histos[i]->GetYaxis()->SetTitle(y_axis_title.c_str());
-            histos[i]->SetName("Madgraph");
-            histos[i]->Draw(draw_options.c_str());
-            canv->Update();
-            TPaveStats *st = (TPaveStats*)histos[i]->FindObject("stats");
-            st->SetX1NDC(0.65); 
-            st->SetX2NDC(0.89); 
-            st->SetY1NDC(0.6); 
-            st->SetY2NDC(0.75); 
+
+              if (draw_ratio_hist) {
+                histos[i]->GetXaxis()->SetLabelSize(0.0);
+                histos[i]->GetXaxis()->SetTitleSize(0.0);
+              }
+
+              histos[i]->GetYaxis()->SetTitle(y_axis_title.c_str());
+              //histos[i]->SetName("Madgraph");
+              histos[i]->Draw(draw_options.c_str());
+              canv->Update();
+              /*
+                 TPaveStats *st = (TPaveStats*)histos[i]->FindObject("stats");
+                 st->SetX1NDC(0.65); 
+                 st->SetX2NDC(0.89); 
+                 st->SetY1NDC(0.6); 
+                 st->SetY2NDC(0.75); 
+                 */
           } else {
-            histos[i]->SetName("aMC@NLO");
-            histos[i]->Draw(("SAMES"+draw_options).c_str());
+            //histos[i]->SetName("aMC@NLO");
+            histos[i]->Draw(("SAME"+draw_options).c_str());
             canv->Update();
-            TPaveStats *st = (TPaveStats*)histos[i]->FindObject("stats");
-            st->SetX1NDC(0.65); 
-            st->SetX2NDC(0.89); 
-            st->SetY1NDC(0.45); 
-            st->SetY2NDC(0.6); 
+            /*
+               TPaveStats *st = (TPaveStats*)histos[i]->FindObject("stats");
+               st->SetX1NDC(0.65); 
+               st->SetX2NDC(0.89); 
+               st->SetY1NDC(0.45); 
+               st->SetY2NDC(0.6); 
+               */
           }
-          
+
 
 
         }
-        
+
         TLatex *title_latex = new TLatex();
         title_latex->SetNDC();
         title_latex->SetTextSize(0.03);
@@ -171,14 +202,14 @@ namespace ajg{
 
         canv->Update();
         
-        leg.SetBorderSize(1);
-        leg.SetTextFont(42);
-        leg.SetLineColor(0);
-        leg.SetLineStyle(1);
-        leg.SetLineWidth(1);
-        leg.SetFillColor(0);
-        leg.SetFillStyle(1001);
-        leg.Draw();
+        legend->SetBorderSize(1);
+        legend->SetTextFont(42);
+        legend->SetLineColor(0);
+        legend->SetLineStyle(1);
+        legend->SetLineWidth(1);
+        legend->SetFillColor(0);
+        legend->SetFillStyle(1001);
+        legend->Draw();
 
         if (draw_ratio_hist) {
           canv->cd();
@@ -192,9 +223,9 @@ namespace ajg{
             TH1F* num = 0;
             TH1F* den = 0;
             for (unsigned m = 0; m < elements_.size(); ++m) {
-              if (elements_[m].element_name == ratios_[k].hist_numerator)
+              if (elements_[m].name() == ratios_[k].hist_numerator())
                 num = histos[m];
-              if (elements_[m].element_name == ratios_[k].hist_denominator)
+              if (elements_[m].name() == ratios_[k].hist_denominator())
                 den = histos[m];
             }
             if (num && den) {
@@ -203,14 +234,14 @@ namespace ajg{
                 ratio_ele[k]->GetXaxis()->SetRangeUser(x_axis_min,x_axis_max);
               }
               ratio_ele[k]->Divide(den);
-              ratio_ele[k]->SetLineColor(ratios_[k].line_color);
-              ratio_ele[k]->SetLineWidth(ratios_[k].line_width);
-              ratio_ele[k]->SetLineStyle(ratios_[k].line_style);
-              ratio_ele[k]->SetMarkerColor(ratios_[k].marker_color);
-              ratio_ele[k]->SetMarkerSize(ratios_[k].marker_size);
-              ratio_ele[k]->SetMarkerStyle(ratios_[k].marker_style);
-              ratio_ele[k]->SetFillColor(ratios_[k].fill_color);
-              ratio_ele[k]->SetFillStyle(ratios_[k].fill_style);
+              ratio_ele[k]->SetLineColor(ratios_[k].line_color());
+              ratio_ele[k]->SetLineWidth(ratios_[k].line_width());
+              ratio_ele[k]->SetLineStyle(ratios_[k].line_style());
+              ratio_ele[k]->SetMarkerColor(ratios_[k].marker_color());
+              ratio_ele[k]->SetMarkerSize(ratios_[k].marker_size());
+              ratio_ele[k]->SetMarkerStyle(ratios_[k].marker_style());
+              ratio_ele[k]->SetFillColor(ratios_[k].fill_color());
+              ratio_ele[k]->SetFillStyle(ratios_[k].fill_style());
               if (k == 0)
               {
                 ratio_ele[k]->GetXaxis()->SetLabelSize(0.07);
