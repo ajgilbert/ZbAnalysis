@@ -42,6 +42,10 @@ int main(int argc, char* argv[]){
   TFile mcfm_file("mcfmPlotter.root");
   
   ///
+
+  //PATH
+  //HIST_NAME
+  //REBIN FACTOR
   ajg::TH1PlotElement amcatnlo_ele("amcatnlo",&amcatnlo_file,"/",hist_name);
   amcatnlo_ele.set_scale_factor(16.1/129807);
   amcatnlo_ele.set_legend_text("aMC@NLO");
@@ -59,33 +63,35 @@ int main(int argc, char* argv[]){
   madgraph_pj_ele.set_legend_text("Madgraph (Parton Jet)");
   madgraph_pj_ele.set_rebin_factor(5);
   SetStyle(madgraph_pj_ele,38);
-  /*
   ///
   ajg::TH1PlotElement amcatnlo_pj_ele("amcatnlo_pj",&amcatnlo_pj_file,"/",hist_name);
-  amcatnlo_pj_ele.set_scale_factor(16.1/129807);
+  amcatnlo_pj_ele.set_scale_factor(16.1/229807);
   amcatnlo_pj_ele.set_legend_text("aMC@NLO (Parton Jet)");
   amcatnlo_pj_ele.set_rebin_factor(5);
   SetStyle(amcatnlo_pj_ele,46);
   //
-  */
   ajg::TH1PlotElement mcfm_ele("mcfm",&mcfm_file,"/","pT_MCFM");
   mcfm_ele.set_scale_factor(1/1000.);
   mcfm_ele.set_legend_text("MCFM");
-  mcfm_ele.set_rebin_factor(5);
   SetStyle(mcfm_ele,11);
+  mcfm_ele.set_fill_style(1001);
+  mcfm_ele.set_fill_color(17);
+  mcfm_ele.set_draw_marker(false);
+  mcfm_ele.set_draw_stat_error_y(false);
+  mcfm_ele.set_rebin_factor(5);
   ///
   
-  test_plot.AddTH1PlotElement(amcatnlo_ele);
+  test_plot.AddTH1PlotElement(mcfm_ele);
+  //test_plot.AddTH1PlotElement(amcatnlo_ele);
   //test_plot.AddTH1PlotElement(amcatnlo_pj_ele);
   test_plot.AddTH1PlotElement(madgraph_ele);
   test_plot.AddTH1PlotElement(madgraph_pj_ele);
-  test_plot.AddTH1PlotElement(mcfm_ele);
 
   //test_plot.x_axis_title = "#eta";
   test_plot.x_axis_title = "p_{T} (GeV)";
   test_plot.y_axis_title = "Events";
-  test_plot.x_axis_min = 5;
-  test_plot.x_axis_max = 120;
+  test_plot.SetXaxisRange(5,120);
+  test_plot.SetRatioYaxisRange(0,4);
   test_plot.y_axis_log = true;
   test_plot.ratio_y_axis_title = "MC/MCFM Ratio";
   
@@ -97,16 +103,16 @@ int main(int argc, char* argv[]){
   SetStyle(mg_ratio,9);
   ajg::RatioPlotElement mg_pj_ratio("mg_pj_ratio","madgraph_pj","mcfm");
   SetStyle(mg_pj_ratio,38);
-  /*
   ajg::RatioPlotElement amcatnlo_pj_ratio("amcatnlo_pj_ratio","amcatnlo_pj","mcfm");
   SetStyle(amcatnlo_pj_ratio,46);
-  */
   test_plot.AddRatioPlotElement(mg_pj_ratio);
   test_plot.AddRatioPlotElement(mg_ratio);
-  test_plot.AddRatioPlotElement(amcatnlo_ratio);
+  //test_plot.AddRatioPlotElement(amcatnlo_ratio);
   //test_plot.AddRatioPlotElement(amcatnlo_pj_ratio);
-  test_plot.title_left = "Madgraph vs. aMC@NLO";
+  test_plot.title_left = "Madgraph vs. MCFM";
   test_plot.GeneratePlot();
+
+
 
   /*
   //reco_gen_jet_resp_25_35
