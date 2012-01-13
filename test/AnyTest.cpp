@@ -6,7 +6,14 @@
 #include <cxxabi.h>
 
 #include "boost/any.hpp"
+#include "boost/function.hpp"
 #include "TLorentzVector.h"
+#include "TFile.h"
+#include "TTree.h"
+#include <typeinfo>
+#include "EventBase.h"
+#include "TreeEvent.h"
+
 
 using boost::any;
 using boost::any_cast;
@@ -41,6 +48,12 @@ class AnyMap {
 
 };
 
+template <class T>
+void PrintDefault() {
+  T x;
+  std::cout << typeid(x).name() << std::endl;
+}
+
 int main(int argc, char* argv[]){
 
   std::cout << "Hello World!" << std::endl;
@@ -71,6 +84,43 @@ int main(int argc, char* argv[]){
   vec.Print();
   
   std::cout << b << std::endl;
+
+  boost::function<void (void)> f1 = &PrintDefault<double>;
+  boost::function<void (void)> f2 = &PrintDefault<int>;
+  f1();
+  f2();
+
+  ajg::EventBase base;
+  double x = 10;
+  std::vector<int> t_vec(4,10);
+  base.Add("test_object", x);
+  base.Add("some_vector", &t_vec);
+  base.Add("some_function", &f1);
+  std::cout << "Listing Products in Event:" << std::endl;
+  base.List();
+
+  TFile f("test.root");
+  TTree* tree = (TTree*)f.Get("test");
+
+
+
+  ajg::TreeEvent event;
+  event.SetTree(tree);
+  event.AutoAddBranch<TLorentzVector>("tlv");
+  for (unsigned i = 0; i < tree->GetEntries(); ++i) {
+  event.SetEvent(i);
+    TLorentzVector *tlv = event.Get<TLorentzVector*>("tlv");
+      tlv->Print();
+
+
+}
+  event.List();
+  //double z = base.Get<double>("test_object");
+
+
+
+
+
 
   
   return 0;

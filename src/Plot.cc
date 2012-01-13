@@ -1,5 +1,12 @@
-
+//Class Header
 #include "Plot.h"
+//Standard Library
+#include <vector>
+#include <iostream>
+//ZbAnalysis
+#include "TH1PlotElement.h"
+#include "RatioPlotElement.h"
+//ROOT
 #include "TROOT.h"
 #include "TH1F.h"
 #include "TCanvas.h"
@@ -7,11 +14,8 @@
 #include "TLatex.h"
 #include "TLegend.h"
 #include "TPaveStats.h"
+#include "THStack.h"
 #include "TPad.h"
-#include <vector>
-#include <iostream>
-#include "TH1PlotElement.h"
-#include "RatioPlotElement.h"
 
 namespace ajg{
 
@@ -24,6 +28,7 @@ namespace ajg{
       } else {
         elements_.push_back(element);
         element_map_[element.name()] = element;
+        if (element.in_stack()) ++n_in_stack;
       }
       return true;
     } else {
@@ -57,6 +62,8 @@ namespace ajg{
     unsigned n_legend = 0;
     double y_pos_max = 0.90;
     double y_pos_current = 0.90;
+    THStack thstack("stack","stack");
+    unsigned n_added_to_stack = 0;
 
     //1st Loop through elements - information gathering
     for (unsigned i = 0; i < n_elements; ++i) {
@@ -90,6 +97,7 @@ namespace ajg{
     }
 
     double max_bin_content = 0.0;
+    bool first_drawn = false;
     for (unsigned i = 0; i < n_elements; ++i) {
       TH1PlotElement & ele = elements_[i];
       //This is a fix for histograms with negative bin content
@@ -155,7 +163,6 @@ namespace ajg{
         if (x_axis_min > 0 && x_axis_max > 0){
           ele.hist_ptr()->GetXaxis()->SetRangeUser(x_axis_min,x_axis_max);
         }
-
         if (draw_ratio_hist) {
           ele.hist_ptr()->GetXaxis()->SetLabelSize(0.0);
           ele.hist_ptr()->GetXaxis()->SetTitleSize(0.0);
@@ -163,7 +170,19 @@ namespace ajg{
 
         ele.hist_ptr()->GetYaxis()->SetTitle(y_axis_title.c_str());
         //ele.hist_ptr()->SetName("Madgraph");
-        ele.hist_ptr()->Draw(draw_options.c_str());
+        if (!ele.in_stack()) {
+          ele.hist_ptr()->Draw(draw_options.c_str());
+          first_drawn = true;
+        } else {
+          thstack.Add(ele.hist_ptr());
+          if (n_added_to_stack == 0) thstack.SetHistogram(ele.hist_ptr());
+          ++n_added_to_stack;
+          if (n_added_to_stack == n_in_stack) {
+            thstack.Draw();
+            first_drawn = true;
+          }
+        }
+
         canv->Update();
         /*
            TPaveStats *st = (TPaveStats*)ele.hist_ptr()->FindObject("stats");
@@ -174,7 +193,21 @@ namespace ajg{
            */
       } else {
         //ele.hist_ptr()->SetName("aMC@NLO");
-        ele.hist_ptr()->Draw(("SAME"+draw_options).c_str());
+        if (!ele.in_stack()) {
+          std::string same_opt = "";
+          if (first_drawn) same_opt = "SAME";
+          first_drawn = true;
+          ele.hist_ptr()->Draw((same_opt+draw_options).c_str());
+        } else {
+          thstack.Add(ele.hist_ptr());
+          ++n_added_to_stack;
+          if (n_added_to_stack == n_in_stack) {
+            std::string same_opt = "";
+            if (first_drawn) same_opt = "SAME";
+            first_drawn = true;
+            thstack.Draw((same_opt+"HIST").c_str());
+          }
+        }
         canv->Update();
         /*
            TPaveStats *st = (TPaveStats*)ele.hist_ptr()->FindObject("stats");
@@ -195,7 +228,7 @@ namespace ajg{
     title_latex->SetTextAlign(31);
     title_latex->DrawLatex(0.95,0.96,title_right.c_str());
     title_latex->SetTextAlign(11);
-    title_latex->DrawLatex(0.16,0.96,title_left.c_str());
+    title_latex->DrawLatex(0.14,0.96,title_left.c_str());
 
 
     //Adjust the y-axis maximum to account for largest bin

@@ -10,8 +10,12 @@ using namespace std;
 void SetStyle(ajg::TH1PlotElement & ele, unsigned color) {
   ele.set_marker_color(color);
   ele.set_line_color(color);
-  ele.set_draw_fill(true);
+  ele.set_fill_color(color);
+  ele.set_fill_style(1001);
+  ele.set_draw_fill(false);
   ele.set_draw_stat_error_y(true);
+  ele.set_draw_marker(true);
+  ele.set_in_stack(false);
   return;
 }
 
@@ -73,19 +77,19 @@ int main(int argc, char* argv[]){
   ajg::TH1PlotElement mcfm_ele("mcfm",&mcfm_file,"/","pT_MCFM");
   mcfm_ele.set_scale_factor(1/1000.);
   mcfm_ele.set_legend_text("MCFM");
-  SetStyle(mcfm_ele,11);
-  mcfm_ele.set_fill_style(1001);
-  mcfm_ele.set_fill_color(17);
-  mcfm_ele.set_draw_marker(false);
-  mcfm_ele.set_draw_stat_error_y(false);
   mcfm_ele.set_rebin_factor(5);
+  SetStyle(mcfm_ele,1);
+  mcfm_ele.set_in_stack(false);
+  mcfm_ele.set_draw_fill(false);
+  mcfm_ele.set_draw_stat_error_y(true);
+  mcfm_ele.set_draw_marker(true);
   ///
   
-  test_plot.AddTH1PlotElement(mcfm_ele);
-  //test_plot.AddTH1PlotElement(amcatnlo_ele);
-  //test_plot.AddTH1PlotElement(amcatnlo_pj_ele);
+  test_plot.AddTH1PlotElement(amcatnlo_ele);
+  test_plot.AddTH1PlotElement(amcatnlo_pj_ele);
   test_plot.AddTH1PlotElement(madgraph_ele);
   test_plot.AddTH1PlotElement(madgraph_pj_ele);
+  test_plot.AddTH1PlotElement(mcfm_ele);
 
   //test_plot.x_axis_title = "#eta";
   test_plot.x_axis_title = "p_{T} (GeV)";
@@ -107,8 +111,8 @@ int main(int argc, char* argv[]){
   SetStyle(amcatnlo_pj_ratio,46);
   test_plot.AddRatioPlotElement(mg_pj_ratio);
   test_plot.AddRatioPlotElement(mg_ratio);
-  //test_plot.AddRatioPlotElement(amcatnlo_ratio);
-  //test_plot.AddRatioPlotElement(amcatnlo_pj_ratio);
+  test_plot.AddRatioPlotElement(amcatnlo_ratio);
+  test_plot.AddRatioPlotElement(amcatnlo_pj_ratio);
   test_plot.title_left = "Madgraph vs. MCFM";
   test_plot.GeneratePlot();
 

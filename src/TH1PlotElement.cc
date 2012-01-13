@@ -39,6 +39,7 @@ namespace ajg{
   void TH1PlotElement::SetDefaults() {
     hist_ptr_           = 0;
     legend_text_        = "";
+    in_stack_           = false;
     draw_fill_          = false;
     fill_color_         = 0;
     fill_style_         = 0;

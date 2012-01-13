@@ -7,7 +7,7 @@
 /*! 
  Some text. 
  */
-namespace ZbAnalysis{
+namespace ajg{
 
   class BranchHandlerBase{
     private:
@@ -25,6 +25,8 @@ namespace ZbAnalysis{
       TBranch* GetBranchPtr(){
         return branch_ptr_;
       }
+
+      virtual ~BranchHandlerBase();
 
   };
 }

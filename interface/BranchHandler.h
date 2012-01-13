@@ -7,7 +7,7 @@
 
 #include "TTree.h"
 
-namespace ZbAnalysis{
+namespace ajg{
 
 //! An abstract base class for the automatic handling of branches in a TTree
 /*! 
@@ -32,6 +32,10 @@ namespace ZbAnalysis{
         }
         T* GetPtr(){
           return ptr_;
+        }
+
+        virtual ~BranchHandler() {
+          delete ptr_;
         }
     };
 

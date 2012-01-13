@@ -12,6 +12,7 @@ namespace ajg {
       std::string name_;
       TH1F* hist_ptr_;
       std::string legend_text_;
+      bool in_stack_;
       //Fill Settings
       bool draw_fill_;
       int fill_color_;
@@ -55,6 +56,7 @@ namespace ajg {
       std::string name() const { return name_; }
       TH1F* hist_ptr() const { return hist_ptr_; }
       std::string legend_text() const { return legend_text_; }
+      bool in_stack() const { return in_stack_; }
       bool draw_fill() const { return draw_fill_; }
       int fill_color() const { return fill_color_;}
       int fill_style() const { return fill_style_;}
@@ -78,6 +80,7 @@ namespace ajg {
       void set_legend_text(std::string legend_text) { 
         legend_text_ = legend_text; 
       }
+      void set_in_stack(bool in_stack) { in_stack_ = in_stack; }
       void set_draw_fill(bool draw_fill) { draw_fill_ = draw_fill; }
       void set_fill_color(int fill_color) { fill_color_ = fill_color; }
       void set_fill_style(int fill_style) { fill_style_ = fill_style; }

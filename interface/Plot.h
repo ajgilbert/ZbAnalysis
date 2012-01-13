@@ -25,6 +25,7 @@ namespace ajg{
         ratio_y_axis_max = 2;
         draw_y_gridlines = true;
         legend_height = 0.05;
+        n_in_stack = 0;
 
       }
       int GeneratePlot();
@@ -66,6 +67,7 @@ namespace ajg{
       std::map<std::string,ajg::TH1PlotElement> element_map_;
       std::vector<std::string> output_formats_;
       void SetTdrStyle();
+      unsigned n_in_stack;
   };
 
 
