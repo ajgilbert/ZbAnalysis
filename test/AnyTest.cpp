@@ -13,40 +13,10 @@
 #include <typeinfo>
 #include "EventBase.h"
 #include "TreeEvent.h"
+#include "TSystem.h"
+#include "FWCore/FWLite/interface/AutoLibraryLoader.h"
+#include "UserCode/HbbAnalysis/interface/HbbEvent.hh"
 
-
-using boost::any;
-using boost::any_cast;
-
-class AnyMap {
-  public:
-    AnyMap() {;}
-
-    template <class T>
-      T & MakeProduct(std::string name) {
-        anyMap_[name] = T();
-        return any_cast<T&>(anyMap_[name]);
-      }
-    
-    template <class T>
-      T & MakeProduct(std::string name, T const& inProd) {
-        anyMap_[name] = inProd;
-        return any_cast<T&>(anyMap_[name]);
-      }
-
-    template <class T>
-      T const& GetProduct(std::string name) {
-        return any_cast<T const&>(anyMap_[name]);
-      }
-
-    template <class T>
-      T & GetProductMutable(std::string name) {
-        return any_cast<T &>(anyMap_[name]);
-      }
-  private:
-    std::map<std::string, any> anyMap_;
-
-};
 
 template <class T>
 void PrintDefault() {
@@ -56,66 +26,69 @@ void PrintDefault() {
 
 int main(int argc, char* argv[]){
 
-  std::cout << "Hello World!" << std::endl;
+  gSystem->Load("libFWCoreFWLite.dylib");
+  gSystem->Load("libUserCodeHbbAnalysis.dylib");
+  AutoLibraryLoader::enable();
+
+
   std::cout << "Arguments passed to program: " << argc << std::endl;
   for (int i = 0; i < argc; ++i){
     std::cout << i << "\t" << argv[i] << std::endl;
   }
 
-  int status;
-  boost::any abc = std::vector<TLorentzVector*>();
-  std::string realname = abi::__cxa_demangle(abc.type().name(), 0, 0, &status);
-  
-  std::cout << abc.type().name() << std::endl;
-  std::cout << realname << std::endl;
-  std::cout << status << std::endl;
 
-  AnyMap anyMap;
-  
-  double & a = anyMap.MakeProduct<double>("a");
-  std::cout << a << std::endl;
-  a = 5.5;
-  std::cout << a << std::endl;
+  TFile f("test/AnaTree.root");
+  gDirectory->cd("treeMaker/HbbAnalysis");
+  TTree* tree = (TTree*)gDirectory->Get("Tree");
 
-  double & b = anyMap.GetProductMutable<double>("a");
+  HbbAnalysis::HbbEvent *hbbevent = 0;
 
-  anyMap.MakeProduct("vec",TLorentzVector(4,3,2,1));
-  TLorentzVector const& vec = anyMap.GetProduct<TLorentzVector>("vec");
-  vec.Print();
-  
-  std::cout << b << std::endl;
+  TFile ele_file("test/Electrons.root","RECREATE");
+  TTree ele_tree("ele_tree","ele_tree");
+  std::vector<HbbAnalysis::Electron> *ele_ptr;
+  ele_tree.Branch("electrons",&ele_ptr);
 
-  boost::function<void (void)> f1 = &PrintDefault<double>;
-  boost::function<void (void)> f2 = &PrintDefault<int>;
-  f1();
-  f2();
-
-  ajg::EventBase base;
-  double x = 10;
-  std::vector<int> t_vec(4,10);
-  base.Add("test_object", x);
-  base.Add("some_vector", &t_vec);
-  base.Add("some_function", &f1);
-  std::cout << "Listing Products in Event:" << std::endl;
-  base.List();
-
-  TFile f("test.root");
-  TTree* tree = (TTree*)f.Get("test");
 
 
 
   ajg::TreeEvent event;
   event.SetTree(tree);
-  event.AutoAddBranch<TLorentzVector>("tlv");
-  for (unsigned i = 0; i < tree->GetEntries(); ++i) {
-  event.SetEvent(i);
-    TLorentzVector *tlv = event.Get<TLorentzVector*>("tlv");
-      tlv->Print();
-
-
-}
+  event.AddBranch<HbbAnalysis::HbbEvent>("HbbEvent");
+  std::cout << "Processing " << (tree->GetEntries()) << " events." << std::endl;
+  for (unsigned k =0; k < 1; ++k) {
+    for (unsigned i = 0; i < tree->GetEntries(); ++i) {
+      event.SetEvent(i);
+      hbbevent = event.Get<HbbAnalysis::HbbEvent*>("HbbEvent");
+      event.Add("test_double", double(i));
+      ele_ptr = &(hbbevent->electrons());
+      ele_tree.Fill();
+      //hbbevent->PrintReco();
+    }
+  }
+  ele_file.Write();
+  ele_file.Close();
   event.List();
-  //double z = base.Get<double>("test_object");
+
+  TFile ele_read("test/Electrons.root");
+  TTree* ele_rtree = (TTree*)ele_read.Get("ele_tree");
+  ajg::TreeEvent ele_event;
+  ele_event.SetTree(ele_rtree);
+  ele_event.AddBranchPtrVec<HbbAnalysis::Electron>("electrons");
+
+  std::vector<HbbAnalysis::Electron *> * new_ele_vec = 0;
+
+  for (unsigned i = 0; i < ele_rtree->GetEntries(); ++i) {
+    ele_event.SetEvent(i);
+    new_ele_vec = &(ele_event.Get<std::vector<HbbAnalysis::Electron*> >("electrons"));
+    new_ele_vec->clear();
+    new_ele_vec = &(ele_event.Get<std::vector<HbbAnalysis::Electron*> >("electrons"));
+    std::cout << new_ele_vec->size() << std::endl;
+  }
+
+  ele_event.List();
+
+
+
 
 
 

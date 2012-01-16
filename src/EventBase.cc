@@ -7,7 +7,6 @@
 
 namespace ajg {
 
-
   EventBase::EventBase() {
     ;
   }
@@ -37,7 +36,7 @@ namespace ajg {
     products_.clear();
   }
 
-  unsigned int EventBase::Remove(std::string name) {
+  unsigned int EventBase::Remove(std::string const& name) {
     if (!Exists(name)) {
       return 1;
     } else {
@@ -46,5 +45,4 @@ namespace ajg {
     }
   }
  
-
 }

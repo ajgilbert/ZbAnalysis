@@ -30,7 +30,7 @@ namespace ajg{
         void SetAddress(){
           GetBranchPtr()->SetAddress(&ptr_);
         }
-        T* GetPtr(){
+        T* & GetPtr(){
           return ptr_;
         }
 

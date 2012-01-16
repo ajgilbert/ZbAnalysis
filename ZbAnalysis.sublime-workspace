@@ -1,0 +1,613 @@
+{
+	"auto_complete":
+	{
+		"selected_items":
+		[
+			[
+				"TLoren",
+				"TLorentzVector	"
+			],
+			[
+				"Pr",
+				"Products"
+			],
+			[
+				"Get",
+				"EventBase::Get<class T>(std::string name)	T &"
+			],
+			[
+				"TreeEvent",
+				"TreeEvent	"
+			],
+			[
+				"AutoCopy",
+				"AutoCopy<class T>(std::string name)	void"
+			],
+			[
+				"psu",
+				"insert(iterator __position, size_type __n, const value_type &__x)	void"
+			],
+			[
+				"string",
+				"string	"
+			],
+			[
+				"function",
+				"function0<typename R>	"
+			],
+			[
+				"vector",
+				"vector<typename _Tp>	"
+			],
+			[
+				"endl",
+				"endl(basic_ostream<_CharT, _Traits> &__os)	basic_ostream<_CharT, _Traits> &"
+			],
+			[
+				"cout",
+				"cout	ostream"
+			],
+			[
+				"Re",
+				"Exists(const std::string &name)	bool"
+			],
+			[
+				"cle",
+				"clear()	void"
+			],
+			[
+				"any_cast",
+				"any_cast<typename ValueType>(boost::any &operand)	ValueType"
+			],
+			[
+				"Lis",
+				"List()	void"
+			],
+			[
+				"A",
+				"Add(std::string name, const T &product)	unsigned int"
+			],
+			[
+				"Eve",
+				"EventBase	"
+			],
+			[
+				"first",
+				"first	const std::basic_string<char>"
+			],
+			[
+				"en",
+				"end()	iterator"
+			],
+			[
+				"be",
+				"begin()	iterator"
+			],
+			[
+				"const_",
+				"const_iterator	"
+			],
+			[
+				"map",
+				"map<typename _Key, typename _Tp>	"
+			],
+			[
+				"lambda",
+				"lambda	"
+			],
+			[
+				"_1",
+				"_1	boost::lambda::placeholder1_type &"
+			],
+			[
+				"boost",
+				"boost"
+			],
+			[
+				"end",
+				"end()	iterator"
+			],
+			[
+				"for_e",
+				"for_each(_InputIterator __first, _InputIterator __last, _Function __f)	_Function"
+			],
+			[
+				"L",
+				"List()	void"
+			],
+			[
+				"Even",
+				"EventBase"
+			],
+			[
+				"any",
+				"__FINITE_MATH_ONLY__	"
+			],
+			[
+				"nam",
+				"realname"
+			],
+			[
+				"ty",
+				"type"
+			],
+			[
+				"std",
+				"strtod(const char *, char **)	double"
+			],
+			[
+				"cou",
+				"cout	ostream"
+			],
+			[
+				"co",
+				"codecvt_base	"
+			],
+			[
+				"cla",
+				"clear()	void"
+			],
+			[
+				"pus",
+				"push_back(const value_type &__x)	void"
+			],
+			[
+				"hist",
+				"hist_ptr() const	TH1F *"
+			],
+			[
+				"Mod",
+				"TPad::Modified()	void"
+			],
+			[
+				"AddFre",
+				"AddFriend(TTree *tree)	TFriendElement *"
+			],
+			[
+				"f",
+				"f"
+			]
+		]
+	},
+	"buffers":
+	[
+		{
+			"file": "interface/EventBase.h",
+			"settings":
+			{
+				"buffer_size": 1131,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "interface/TreeEvent.h",
+			"settings":
+			{
+				"buffer_size": 1892,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "test/AnyTest.cpp",
+			"settings":
+			{
+				"buffer_size": 1153,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "interface/BranchHandler.h",
+			"settings":
+			{
+				"buffer_size": 844,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "src/EventBase.cc",
+			"settings":
+			{
+				"buffer_size": 900,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "src/TreeEvent.cc",
+			"settings":
+			{
+				"buffer_size": 388,
+				"line_ending": "Unix"
+			}
+		}
+	],
+	"build_system": "Packages/User/zbanalysis_build.sublime-build",
+	"command_palette":
+	{
+		"height": 67.0,
+		"selected_items":
+		[
+			[
+				"upd",
+				"Package Control: Upgrade/Overwrite All Packages"
+			],
+			[
+				"up",
+				"Package Control: Upgrade/Overwrite All Packages"
+			],
+			[
+				"Reidne",
+				"Indentation: Reindent Lines"
+			],
+			[
+				"Indent",
+				"Indentation: Reindent Lines"
+			],
+			[
+				"SublimeCla",
+				"Preferences: SublimeClang Settings – User"
+			],
+			[
+				"SublimeC",
+				"Preferences: SublimeClang Settings – Default"
+			],
+			[
+				"Pack",
+				"Package Control: Install Package"
+			]
+		],
+		"width": 444.0
+	},
+	"console":
+	{
+		"height": 115.0
+	},
+	"distraction_free":
+	{
+		"menu_visible": true,
+		"show_minimap": false,
+		"show_open_files": false,
+		"show_tabs": false,
+		"side_bar_visible": false,
+		"status_bar_visible": false
+	},
+	"file_history":
+	[
+		"/Users/Andrew/Library/Application Support/Sublime Text 2/Packages/User/Default (OSX).sublime-keymap",
+		"/Users/Andrew/Library/Application Support/Sublime Text 2/Packages/Default/Default (OSX).sublime-keymap",
+		"/Users/Andrew/Code/ZbAnalysis/makefile",
+		"/Users/Andrew/Code/ZbAnalysis/src/BranchHandler.cc",
+		"/Users/Andrew/Code/ZbAnalysis/interface/BranchHandler.h",
+		"/Users/Andrew/Code/ZbAnalysis/interface/cdiggins_any.h",
+		"/Users/Andrew/Code/ZbAnalysis/src/BranchHandlerBase.cc",
+		"/Users/Andrew/Code/ZbAnalysis/interface/BranchHandlerBase.h",
+		"/Users/Andrew/Library/Application Support/Sublime Text 2/Packages/Default/Global.sublime-settings",
+		"/Users/Andrew/Library/Application Support/Sublime Text 2/Packages/Default/Base File.sublime-settings",
+		"/Users/Andrew/Library/Application Support/Sublime Text 2/Packages/User/Global.sublime-settings",
+		"/Users/Andrew/Code/ZbAnalysis/src/Plot.cc",
+		"/Users/Andrew/Code/ZbAnalysis/test/bind.cpp",
+		"/Users/Andrew/Code/ZbAnalysis/interface/Plot.h",
+		"/Users/Andrew/Library/Application Support/Sublime Text 2/Packages/SublimeClang/SublimeClang.sublime-settings",
+		"/Users/Andrew/Library/Application Support/Sublime Text 2/Packages/User/SublimeClang.sublime-settings",
+		"/Users/Andrew/Code/ZbAnalysis/interface/EventBase.h",
+		"/Users/Andrew/Library/Application Support/Sublime Text 2/Packages/User/zbanalysis_build.sublime-build",
+		"/Users/Andrew/Code/ZbAnalysis/test/test1.cpp",
+		"/Users/Andrew/Code/ZbAnalysis/interface/TH1PlotElement.h",
+		"/Users/Andrew/Library/Application Support/Sublime Text 2/Packages/User/C++.sublime-settings",
+		"/Users/Andrew/Code/ZbAnalysis/test/PlotTest.cpp",
+		"/Users/Andrew/Code/Papers/notes/AN-11-305/trunk/IntroAndSamples.tex",
+		"/Users/Andrew/Code/Papers/notes/AN-11-305/trunk/AN-11-305.tex",
+		"/Users/Andrew/Code/ZbAnalysis/src/RangeVector.cc",
+		"/Users/Andrew/Code/ZbAnalysis/interface/RangeVector.h",
+		"/Users/Andrew/Code/ZbAnalysis/test/test2.cpp",
+		"/Users/Andrew/Code/ZbAnalysis/test/YieldTest.cpp"
+	],
+	"find":
+	{
+		"height": 33.0
+	},
+	"find_in_files":
+	{
+		"height": 0.0,
+		"where_history":
+		[
+			""
+		]
+	},
+	"find_state":
+	{
+		"case_sensitive": false,
+		"find_history":
+		[
+			"_line",
+			"delete_line",
+			"line",
+			"dynamic_cast",
+			"cast",
+			"any_cast",
+			"EventBase",
+			"indent",
+			"tab",
+			"side_bar",
+			"super+k",
+			"side_bar",
+			"dsfsdf"
+		],
+		"highlight": true,
+		"in_selection": false,
+		"preserve_case": false,
+		"regex": false,
+		"replace_history":
+		[
+			"TreeEvent"
+		],
+		"reverse": false,
+		"show_context": true,
+		"use_buffer2": true,
+		"whole_word": false,
+		"wrap": true
+	},
+	"groups":
+	[
+		{
+			"selected": 3,
+			"sheets":
+			[
+				{
+					"buffer": 0,
+					"file": "interface/EventBase.h",
+					"settings":
+					{
+						"buffer_size": 1131,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								1108,
+								1108
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/C++/C++.tmLanguage",
+							"tab_size": 2,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 1,
+					"file": "interface/TreeEvent.h",
+					"settings":
+					{
+						"buffer_size": 1892,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								1476,
+								1476
+							]
+						],
+						"settings":
+						{
+							"rulers":
+							[
+							],
+							"syntax": "Packages/C++/C++.tmLanguage",
+							"tab_size": 2,
+							"translate_tabs_to_spaces": true,
+							"wrap_width": 80
+						},
+						"translation.x": 0.0,
+						"translation.y": 488.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 2,
+					"file": "test/AnyTest.cpp",
+					"settings":
+					{
+						"buffer_size": 1153,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								1042,
+								1042
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/C++/C++.tmLanguage",
+							"tab_size": 2,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 38.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 3,
+					"file": "interface/BranchHandler.h",
+					"settings":
+					{
+						"buffer_size": 844,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								575,
+								575
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/C++/C++.tmLanguage",
+							"tab_size": 2,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				}
+			]
+		},
+		{
+			"selected": 1,
+			"sheets":
+			[
+				{
+					"buffer": 4,
+					"file": "src/EventBase.cc",
+					"settings":
+					{
+						"buffer_size": 900,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								188,
+								188
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/C++/C++.tmLanguage",
+							"tab_size": 2,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 123.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 5,
+					"file": "src/TreeEvent.cc",
+					"settings":
+					{
+						"buffer_size": 388,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								386,
+								386
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/C++/C++.tmLanguage",
+							"tab_size": 2,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				}
+			]
+		}
+	],
+	"incremental_find":
+	{
+		"height": 0.0
+	},
+	"input":
+	{
+		"height": 0.0
+	},
+	"layout":
+	{
+		"cells":
+		[
+			[
+				0,
+				0,
+				1,
+				1
+			],
+			[
+				1,
+				0,
+				2,
+				1
+			]
+		],
+		"cols":
+		[
+			0.0,
+			0.5,
+			1.0
+		],
+		"rows":
+		[
+			0.0,
+			1.0
+		]
+	},
+	"menu_visible": true,
+	"output.clang":
+	{
+		"height": 69.0
+	},
+	"replace":
+	{
+		"height": 62.0
+	},
+	"save_all_on_build": true,
+	"select_file":
+	{
+		"height": 0.0,
+		"selected_items":
+		[
+			[
+				"",
+				"test/AnyTest.cpp"
+			],
+			[
+				"rangevec",
+				"interface/RangeVector.h"
+			]
+		],
+		"width": 0.0
+	},
+	"select_project":
+	{
+		"height": 0.0,
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"show_minimap": false,
+	"show_open_files": false,
+	"show_tabs": true,
+	"side_bar_visible": true,
+	"side_bar_width": 201.0,
+	"status_bar_visible": true
+}

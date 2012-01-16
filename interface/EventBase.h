@@ -39,10 +39,14 @@ namespace ajg {
     
 
     template <class T>
-    T & Get(std::string name) {
+    T & Get(std::string const& name) {
       if (Exists(name)) {
         return boost::any_cast<T &>(products_[name]);
       } else {
+        std::cerr << "Error: Attempt to get product with name \"" 
+        << name << "\" failed, no product with this name  exists."
+        << std::endl;
+        std::cerr << "An exception will be thrown." << std::endl;
         throw;
       }
     }
@@ -51,7 +55,7 @@ namespace ajg {
 
     void Clear();
 
-    unsigned int Remove(std::string name);
+    unsigned int Remove(std::string const& name);
 
     bool Exists(std::string const& name);
     
