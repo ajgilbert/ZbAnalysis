@@ -61,7 +61,7 @@ int main(int argc, char* argv[]){
   header << "  virtual ~" << name << "();" << std::endl;
   header << std::endl;
   header << "  virtual int PreAnalysis();" << std::endl;
-  header << "  virtual int Execute(EventBase *event);" << std::endl;
+  header << "  virtual int Execute(TreeEvent *event);" << std::endl;
   header << "  virtual int PostAnalysis();" << std::endl;
   header << "};" << std::endl;
   header << "}" << std::endl;
@@ -85,7 +85,7 @@ int main(int argc, char* argv[]){
   implementation << "    return 0;" << std::endl;
   implementation << "  }" << std::endl;
   implementation << std::endl;
-  implementation << "  int " << name << "::" << "Execute(EventBase *event) {" << std::endl;
+  implementation << "  int " << name << "::" << "Execute(TreeEvent *event) {" << std::endl;
   implementation << "    return 0;" << std::endl;
   implementation << "  }" << std::endl;
   implementation << "  int " << name << "::" << "PostAnalysis() {" << std::endl;

@@ -35,7 +35,7 @@ int main(int argc, char* argv[]){
   if (flav == "ee") altflav = "El";
   if (flav == "mm") altflav = "Mu";
   
-  unsigned nMC = 6;
+  unsigned nMC = 5;
 
   vector<string> samplePathsMC = StringVecify(nMC,
       "/data/Zb/TTJets/4_2_4/S4/TuneZ2/",
@@ -44,10 +44,10 @@ int main(int argc, char* argv[]){
       //"/data/Zb/WW/4_2_4/S4/TuneZ2/",
       "/data/Zb/DYJetsToLL/4_2_4/S4/TuneZ2/lFlav/", 
       "/data/Zb/DYJetsToLL/4_2_4/S4/TuneZ2/cFlav/",
-      //"/data/Zb/DYJetsToLL/4_2_4/S4/TuneZ2/bFlav/");
+      "/data/Zb/DYJetsToLL/4_2_4/S4/TuneZ2/bFlav/");
       //"/data/Zb/ZbbToLL/4_2_4/S4/TuneZ2/");
-      "/data/Zb/ZbbToLL/4_2_4/S4/TuneZ2/",
-      "/data/Zb/ZbbToLL/4_2_4/S4/TuneZ2/");
+      //"/data/Zb/ZbbToLL/4_2_4/S4/TuneZ2/",
+      //"/data/Zb/ZbbToLL/4_2_4/S4/TuneZ2/");
 
   vector<string> sampleNamesMC = StringVecify(nMC,
       "tt",
@@ -56,10 +56,10 @@ int main(int argc, char* argv[]){
       //"WW",
       "Z+l",
       "Z+c",
-      //"Z+b");
+      "Z+b");
       //"aMC@NLO");
-      "aMC@NLO-P",
-      "aMC@NLO-M");
+      //"aMC@NLO-P",
+      //"aMC@NLO-M");
   
   vector<double> initialMC = Vecify<double>(nMC,
       3701947.,
@@ -68,10 +68,10 @@ int main(int argc, char* argv[]){
       //4225916.,
       36277961.,
       36277961.,
-      //36277961.);
+      36277961.);
       //424080.);
-      424080.,
-      424080.);
+      //424080.,
+      //424080.);
 
   vector<double> xsMC = Vecify<double>(nMC,
       157.5,
@@ -80,10 +80,10 @@ int main(int argc, char* argv[]){
       //43.0,
       3048.0,
       3048.0,
-      //3048.0);
+      3048.0);
       //16.1);
-      16.1,
-      16.1);
+      //16.1,
+      //16.1);
   
   vector<string> outputFiles = StringVecify(8,
       "Main_Yields.tex",
@@ -121,6 +121,8 @@ int main(int argc, char* argv[]){
   if (!f) {
     std::cerr << "File Not Found: " << (samplePathsMC[i] + "YieldStats_"+flav+".root");
   }
+  yieldsMC.push_back(LoadViaTree<YieldStats>(*f,rw));
+  /*
   if (i < 4) {
     yieldsMC.push_back(LoadViaTree<YieldStats>(*f,rw));
   } else if (i == 4) {
@@ -128,6 +130,7 @@ int main(int argc, char* argv[]){
   } else if (i == 5) {
     yieldsMC.push_back(LoadViaTree<YieldStats>(*f,"PU_TP_BTAG_RW_MINUS"));
   }
+  */
     yieldsMC.at(i).SetSampleName(sampleNamesMC[i]);
     f->Close();
   }
@@ -136,6 +139,7 @@ int main(int argc, char* argv[]){
     table.AddYieldStats(yieldsMC.at(i), 0, initialMC[i], xsMC[i]);
   }
 
+  table.ScaleMc(false);
   table.AddYieldStats(yieldsData, 1);
   table.SpecifySteps(true);
   table.SetStepsToShow(StringVecify(7,"lep_pair","lep_trigmatch","jet_id","jet_btag_HE", "jet_2btag_HE","jet_btag_HP", "jet_2btag_HP"));

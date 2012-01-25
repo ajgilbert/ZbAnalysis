@@ -98,7 +98,7 @@ namespace ajg {
 
     void SetEvent(unsigned event);
 
-    void SetTree(TTree *tree) { tree_ = tree; }
+    void SetTree(TTree *tree); 
 
 
 

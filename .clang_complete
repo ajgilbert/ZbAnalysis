@@ -1,0 +1,5 @@
+-I/Users/Andrew/Code/CMSSW/osx106_amd64_gcc421/lcg/root/5.27.06b-cms23/include/
+-I/Users/Andrew/Code/ZbAnalysis/interface/
+-I/Users/Andrew/Code/CMSSW/osx106_amd64_gcc421//external/boost/1.44.0-cms/include/
+-I/Users/Andrew/Code/CMSSW/osx106_amd64_gcc421/cms/cmssw/CMSSW_4_4_2/src/
+-I/Users/Andrew/Code/CMSSW_4_4_2/src/

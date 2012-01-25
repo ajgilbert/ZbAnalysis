@@ -17,11 +17,12 @@ namespace ajg {
   virtual ~ModuleBase();
   inline void IncreaseProcessedCount() { ++events_processed_; }
   inline unsigned EventsProcessed() { return events_processed_; }
+  inline std::string ModuleName() { return module_name_; }
 
   virtual int PreAnalysis() = 0;
-  virtual int Execute(EventBase *) = 0;
+  virtual int Execute(TreeEvent *) = 0;
   virtual int PostAnalysis() = 0;
-
+  virtual void PrintInfo() = 0;
 };
 }
 

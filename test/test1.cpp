@@ -14,7 +14,9 @@ int main(int argc, char* argv[]){
   }
   
   
-  TLorentzVector tlv;  
+  TLorentzVector tlv;
+  tlv.DeltaPhi(tlv);
+  
   
   TFile f("test.root","RECREATE");
   TTree t("test","test");

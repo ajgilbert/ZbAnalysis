@@ -39,10 +39,10 @@ int main(int argc, char* argv[]){
   test_plot.output_filename = "initial_quark_pt.pdf";
   std::string hist_name = "pt_initial_quark";
 
-  TFile amcatnlo_file("amcatnlo_ee_gj.root");
+  TFile amcatnlo_file("ee_gj.root");
   TFile madgraph_file("madgraph_ee_gj.root");
   TFile madgraph_pj_file("madgraph_ee_pj.root");
-  TFile amcatnlo_pj_file("amcatnlo_ee_pj.root");
+  TFile amcatnlo_pj_file("ee_pj.root");
   TFile mcfm_file("mcfmPlotter.root");
   
   ///
@@ -51,7 +51,7 @@ int main(int argc, char* argv[]){
   //HIST_NAME
   //REBIN FACTOR
   ajg::TH1PlotElement amcatnlo_ele("amcatnlo",&amcatnlo_file,"/",hist_name);
-  amcatnlo_ele.set_scale_factor(16.1/129807);
+  amcatnlo_ele.set_scale_factor(16.1/134232.159);
   amcatnlo_ele.set_legend_text("aMC@NLO");
   amcatnlo_ele.set_rebin_factor(5);
   SetStyle(amcatnlo_ele,2);
@@ -69,7 +69,7 @@ int main(int argc, char* argv[]){
   SetStyle(madgraph_pj_ele,38);
   ///
   ajg::TH1PlotElement amcatnlo_pj_ele("amcatnlo_pj",&amcatnlo_pj_file,"/",hist_name);
-  amcatnlo_pj_ele.set_scale_factor(16.1/229807);
+  amcatnlo_pj_ele.set_scale_factor(16.1/134232.159);
   amcatnlo_pj_ele.set_legend_text("aMC@NLO (Parton Jet)");
   amcatnlo_pj_ele.set_rebin_factor(5);
   SetStyle(amcatnlo_pj_ele,46);
@@ -85,9 +85,9 @@ int main(int argc, char* argv[]){
   mcfm_ele.set_draw_marker(true);
   ///
   
-  test_plot.AddTH1PlotElement(amcatnlo_ele);
+  //test_plot.AddTH1PlotElement(amcatnlo_ele);
   test_plot.AddTH1PlotElement(amcatnlo_pj_ele);
-  test_plot.AddTH1PlotElement(madgraph_ele);
+  //test_plot.AddTH1PlotElement(madgraph_ele);
   test_plot.AddTH1PlotElement(madgraph_pj_ele);
   test_plot.AddTH1PlotElement(mcfm_ele);
 
@@ -110,8 +110,8 @@ int main(int argc, char* argv[]){
   ajg::RatioPlotElement amcatnlo_pj_ratio("amcatnlo_pj_ratio","amcatnlo_pj","mcfm");
   SetStyle(amcatnlo_pj_ratio,46);
   test_plot.AddRatioPlotElement(mg_pj_ratio);
-  test_plot.AddRatioPlotElement(mg_ratio);
-  test_plot.AddRatioPlotElement(amcatnlo_ratio);
+  //test_plot.AddRatioPlotElement(mg_ratio);
+  //test_plot.AddRatioPlotElement(amcatnlo_ratio);
   test_plot.AddRatioPlotElement(amcatnlo_pj_ratio);
   test_plot.title_left = "Madgraph vs. MCFM";
   test_plot.GeneratePlot();

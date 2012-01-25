@@ -20,4 +20,10 @@ namespace ajg {
     }
   }
 
+  void TreeEvent::SetTree(TTree *tree) {
+    tree_ = tree;
+    handlers_.clear();
+    on_demand_funcs_.clear();
+    auto_add_funcs_.clear();
+  }
 }
