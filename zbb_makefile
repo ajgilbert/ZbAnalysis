@@ -1,0 +1,33 @@
+#Necessary to use shell built-in commands
+SHELL=bash
+
+USERINCLUDES += -I$(ROOTSYS)/include
+USERINCLUDES += -I$(CMS_PATH)/$(SCRAM_ARCH)/external/boost/1.44.0-cms/include/
+USERINCLUDES += -I $(CMSSW_BASE)/src/ -I $(CMSSW_RELEASE_BASE)/src/
+
+USERLIBS += $(shell root-config --glibs) 
+
+CXXFLAGS = -Wall -W -Wno-unused-function -Wno-parentheses -Wno-char-subscripts -O2 
+LDFLAGS = -shared -Wall -W 
+
+CXX=g++
+LD=g++
+
+
+INCLUDE +=  -I $(BASEDIR)/interface
+INCLUDE += $(USERINCLUDES)
+CXXFLAGS += $(INCLUDE)
+LIBS += $(USERLIBS)
+
+SRCS=$(wildcard $(BASEDIR)/src/*.cc)
+EXES=$(wildcard $(BASEDIR)/test/*.cpp)
+
+all:  bin/ZbbCalc
+
+bin/ZbbCalc: test/ZbbCalc.cpp test/SimpleParamParser.h
+	$(CXX) -o $@ $(CXXFLAGS) $< $(LIBS)
+
+clean:
+	rm -f bin/ZbbCalc
+
+

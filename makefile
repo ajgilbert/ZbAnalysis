@@ -4,15 +4,14 @@ LIBNAME = ZbAnalysis
 #Necessary to use shell built-in commands
 SHELL=bash
 
-USERINCLUDES += $(shell root-config --cflags)
 USERINCLUDES += -I$(ROOTSYS)/include
 USERINCLUDES += -I$(CMS_PATH)/$(SCRAM_ARCH)/external/boost/1.44.0-cms/include/
 USERINCLUDES += -I $(CMSSW_BASE)/src/ -I $(CMSSW_RELEASE_BASE)/src/
 
-USERLIBS += $(shell root-config --glibs) 
+USERLIBS += $(shell root-config --glibs) -lGenVector 
 #USERLIBS +=  -L$(ROOTSYS)/lib -lCore -lCint -lRIO -lNet -lHist -lGraf -lGraf3d -lGpad -lTree -lRint -lPostscript -lMatrix -lPhysics -lMathCore -lThread -lz -lGui -pthread -lm -ldl -rdynamic
 
-USERLIBS += -L$(CMSSW_BASE)/lib/$(SCRAM_ARCH) -lUserCodeHbbAnalysis
+USERLIBS += -L$(CMSSW_BASE)/lib/$(SCRAM_ARCH) -lUserCodeHbbAnalysis -lUserCodeAGilbert
 #BOOST REGEX FOR 4_2_4:
 #USERLIBS += -L$(CMS_PATH)/$(SCRAM_ARCH)/external/boost/1.44.0-cms/lib/ -lboost_regex
 #BOOST REGEX FOR 4_4_0:
@@ -25,7 +24,6 @@ USERLIBS += -L$(CMSSW_RELEASE_BASE)/lib/$(SCRAM_ARCH) -lFWCoreFWLite
 CXXFLAGS = -Wall -W -Wno-unused-function -Wno-parentheses -Wno-char-subscripts -O2 
 LDFLAGS = -shared -Wall -W 
 
-CXX=clang++
 LD=clang++
 CLANGPATH := $(shell type -p clang++)
 

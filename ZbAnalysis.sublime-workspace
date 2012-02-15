@@ -4,6 +4,130 @@
 		"selected_items":
 		[
 			[
+				"ROOT::Math::Vect",
+				"ROOT::Math::VectorUtil::DeltaPhi"
+			],
+			[
+				"comb",
+				"comb1"
+			],
+			[
+				"electro",
+				"electron1"
+			],
+			[
+				"x_eb",
+				"x_e_b_21	double"
+			],
+			[
+				"x_NTa",
+				"x_N_TAG_2	double"
+			],
+			[
+				"Paramer",
+				"FitResult::Parameter(unsigned int i) const	double"
+			],
+			[
+				"TFitRes",
+				"TFitResultPtr	"
+			],
+			[
+				"tot",
+				"total_before_ep_b	double"
+			],
+			[
+				"total_bef",
+				"total_before_ep_l	double"
+			],
+			[
+				"e_r_11",
+				"e_r_11"
+			],
+			[
+				"e_b_11",
+				"e_b_11"
+			],
+			[
+				"Simpl",
+				"SimpleParamParser	"
+			],
+			[
+				"TRand",
+				"TRandom3	"
+			],
+			[
+				"x",
+				"x_e	std::vector<double>"
+			],
+			[
+				"out",
+				"output_path	std::string"
+			],
+			[
+				"tre",
+				"tree_path	const std::string &"
+			],
+			[
+				"anal",
+				"analysis_name	const std::string &"
+			],
+			[
+				"analysis_",
+				"analysis_name_	std::string"
+			],
+			[
+				"cd",
+				"Cd(const char *path)	Bool_t"
+			],
+			[
+				"tree_nam",
+				"tree_name_	std::string"
+			],
+			[
+				"tree_p",
+				"tree_path_	std::string"
+			],
+			[
+				"Modu",
+				"ModuleName()	std::string"
+			],
+			[
+				"Ad",
+				"AddBranchPtrVec<class T>(std::string name)	void"
+			],
+			[
+				"ModuleBase",
+				"ModuleBase	"
+			],
+			[
+				"event",
+				"events_to_process_	unsigned int"
+			],
+			[
+				"GetEn",
+				"GetEntries() const	Long64_t"
+			],
+			[
+				"Set",
+				"SetTree(TTree *tree)	void"
+			],
+			[
+				"fil",
+				"file_ptr	TFile *"
+			],
+			[
+				"inpu",
+				"input_file_paths_	std::vector<std::string>"
+			],
+			[
+				"impl",
+				"implementation	std::ofstream"
+			],
+			[
+				"Add",
+				"EventBase::Add(std::string name, const T &product)	unsigned int"
+			],
+			[
 				"TLoren",
 				"TLorentzVector	"
 			],
@@ -172,50 +296,66 @@
 	"buffers":
 	[
 		{
-			"file": "interface/EventBase.h",
+			"file": "interface/AnalysisBase.h",
 			"settings":
 			{
-				"buffer_size": 1131,
+				"buffer_size": 1182,
 				"line_ending": "Unix"
 			}
 		},
 		{
-			"file": "interface/TreeEvent.h",
+			"file": "interface/HbbEventSplitter.h",
 			"settings":
 			{
-				"buffer_size": 1892,
+				"buffer_size": 1196,
 				"line_ending": "Unix"
 			}
 		},
 		{
-			"file": "test/AnyTest.cpp",
+			"file": "src/ElectronDemoModule.cc",
 			"settings":
 			{
-				"buffer_size": 1153,
+				"buffer_size": 922,
 				"line_ending": "Unix"
 			}
 		},
 		{
-			"file": "interface/BranchHandler.h",
+			"file": "test/ZbbCalc.cpp",
 			"settings":
 			{
-				"buffer_size": 844,
+				"buffer_size": 7663,
 				"line_ending": "Unix"
 			}
 		},
 		{
-			"file": "src/EventBase.cc",
+			"file": "interface/SimpleParamParser.h",
 			"settings":
 			{
-				"buffer_size": 900,
+				"buffer_size": 1775,
 				"line_ending": "Unix"
 			}
 		},
 		{
-			"file": "src/TreeEvent.cc",
+			"file": "test/test1.cpp",
 			"settings":
 			{
-				"buffer_size": 388,
+				"buffer_size": 3174,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "interface/RatioPlotElement.h",
+			"settings":
+			{
+				"buffer_size": 3088,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "test/YieldTest.cpp",
+			"settings":
+			{
+				"buffer_size": 6303,
 				"line_ending": "Unix"
 			}
 		}
@@ -266,34 +406,55 @@
 		"menu_visible": true,
 		"show_minimap": false,
 		"show_open_files": false,
-		"show_tabs": false,
+		"show_tabs": true,
 		"side_bar_visible": false,
 		"status_bar_visible": false
 	},
 	"file_history":
 	[
-		"/Users/Andrew/Library/Application Support/Sublime Text 2/Packages/User/Default (OSX).sublime-keymap",
+		"/Users/Andrew/Library/Application Support/Sublime Text 2/Packages/SublimeClang/Default.sublime-keymap",
 		"/Users/Andrew/Library/Application Support/Sublime Text 2/Packages/Default/Default (OSX).sublime-keymap",
+		"/Users/Andrew/Library/Application Support/Sublime Text 2/Packages/SublimeClang/SublimeClang.sublime-settings",
+		"/Users/Andrew/Code/ZbAnalysis/mm.dat",
+		"/Users/Andrew/Code/ZbAnalysis/ee.dat",
+		"/Users/Andrew/Code/CMSSW/osx106_amd64_gcc421/lcg/root/5.27.06b-cms23/include/TH1.h",
 		"/Users/Andrew/Code/ZbAnalysis/makefile",
-		"/Users/Andrew/Code/ZbAnalysis/src/BranchHandler.cc",
-		"/Users/Andrew/Code/ZbAnalysis/interface/BranchHandler.h",
-		"/Users/Andrew/Code/ZbAnalysis/interface/cdiggins_any.h",
-		"/Users/Andrew/Code/ZbAnalysis/src/BranchHandlerBase.cc",
+		"/Users/Andrew/Code/ZbAnalysis/zbb_makefile",
+		"/Users/Andrew/Code/ZbAnalysis/src/HbbEventSplitter.cc",
+		"/Users/Andrew/Code/ZbAnalysis/src/ModuleBase.cc",
+		"/Users/Andrew/Code/ZbAnalysis/src/AnalysisBase.cc",
+		"/Users/Andrew/Code/ZbAnalysis/test/AnyTest.cpp",
+		"/Users/Andrew/Code/ZbAnalysis/test/test1.cpp",
+		"/Users/Andrew/Code/ZbAnalysis/interface/ModuleBase.h",
+		"/Users/Andrew/Code/ZbAnalysis/test/ModuleTemplate.cpp",
+		"/Users/Andrew/Code/ZbAnalysis/src/ElectronDemoModule.cc",
+		"/Users/Andrew/Code/ZbAnalysis/interface/ElectronDemoModule.h",
+		"/Users/Andrew/Code/ZbAnalysis/interface/AnalysisBase.h",
+		"/Users/Andrew/Library/Application Support/Sublime Text 2/Packages/User/SublimeClang.sublime-settings",
+		"/Users/Andrew/Code/ZbAnalysis/test/ZbbCalc.cpp",
+		"/Users/Andrew/Code/ZbAnalysis/test/PlotTest.cpp",
+		"/Users/Andrew/Code/ZbAnalysis/src/TreeEvent.cc",
+		"/Users/Andrew/Code/ZbAnalysis/src/EventBase.cc",
+		"/Users/Andrew/Code/ZbAnalysis/interface/TreeEvent.h",
 		"/Users/Andrew/Code/ZbAnalysis/interface/BranchHandlerBase.h",
+		"/Users/Andrew/Code/ZbAnalysis/interface/BranchHandler.h",
+		"/Users/Andrew/Code/ZbAnalysis/src/TestModule.cc",
 		"/Users/Andrew/Library/Application Support/Sublime Text 2/Packages/Default/Global.sublime-settings",
 		"/Users/Andrew/Library/Application Support/Sublime Text 2/Packages/Default/Base File.sublime-settings",
+		"/Users/Andrew/Code/ZbAnalysis/interface/EventBase.h",
+		"/Users/Andrew/Code/ZbAnalysis/ZbAnalysis.sublime-project",
+		"/Users/Andrew/Code/ZbAnalysis/ZbAnalysis.sublime-workspace",
+		"/Users/Andrew/Library/Application Support/Sublime Text 2/Packages/User/Default (OSX).sublime-keymap",
+		"/Users/Andrew/Code/ZbAnalysis/src/BranchHandler.cc",
+		"/Users/Andrew/Code/ZbAnalysis/interface/cdiggins_any.h",
+		"/Users/Andrew/Code/ZbAnalysis/src/BranchHandlerBase.cc",
 		"/Users/Andrew/Library/Application Support/Sublime Text 2/Packages/User/Global.sublime-settings",
 		"/Users/Andrew/Code/ZbAnalysis/src/Plot.cc",
 		"/Users/Andrew/Code/ZbAnalysis/test/bind.cpp",
 		"/Users/Andrew/Code/ZbAnalysis/interface/Plot.h",
-		"/Users/Andrew/Library/Application Support/Sublime Text 2/Packages/SublimeClang/SublimeClang.sublime-settings",
-		"/Users/Andrew/Library/Application Support/Sublime Text 2/Packages/User/SublimeClang.sublime-settings",
-		"/Users/Andrew/Code/ZbAnalysis/interface/EventBase.h",
 		"/Users/Andrew/Library/Application Support/Sublime Text 2/Packages/User/zbanalysis_build.sublime-build",
-		"/Users/Andrew/Code/ZbAnalysis/test/test1.cpp",
 		"/Users/Andrew/Code/ZbAnalysis/interface/TH1PlotElement.h",
 		"/Users/Andrew/Library/Application Support/Sublime Text 2/Packages/User/C++.sublime-settings",
-		"/Users/Andrew/Code/ZbAnalysis/test/PlotTest.cpp",
 		"/Users/Andrew/Code/Papers/notes/AN-11-305/trunk/IntroAndSamples.tex",
 		"/Users/Andrew/Code/Papers/notes/AN-11-305/trunk/AN-11-305.tex",
 		"/Users/Andrew/Code/ZbAnalysis/src/RangeVector.cc",
@@ -318,6 +479,12 @@
 		"case_sensitive": false,
 		"find_history":
 		[
+			";",
+			"double",
+			"header",
+			"indent",
+			"tab",
+			"indent",
 			"_line",
 			"delete_line",
 			"line",
@@ -338,6 +505,7 @@
 		"regex": false,
 		"replace_history":
 		[
+			"implementation",
 			"TreeEvent"
 		],
 		"reverse": false,
@@ -349,29 +517,29 @@
 	"groups":
 	[
 		{
-			"selected": 3,
+			"selected": 6,
 			"sheets":
 			[
 				{
 					"buffer": 0,
-					"file": "interface/EventBase.h",
+					"file": "interface/AnalysisBase.h",
 					"settings":
 					{
-						"buffer_size": 1131,
+						"buffer_size": 1182,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								1108,
-								1108
+								281,
+								281
 							]
 						],
 						"settings":
 						{
 							"syntax": "Packages/C++/C++.tmLanguage",
-							"tab_size": 2,
+							"tab_size": 4,
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
@@ -382,78 +550,18 @@
 				},
 				{
 					"buffer": 1,
-					"file": "interface/TreeEvent.h",
+					"file": "interface/HbbEventSplitter.h",
 					"settings":
 					{
-						"buffer_size": 1892,
+						"buffer_size": 1196,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								1476,
-								1476
-							]
-						],
-						"settings":
-						{
-							"rulers":
-							[
-							],
-							"syntax": "Packages/C++/C++.tmLanguage",
-							"tab_size": 2,
-							"translate_tabs_to_spaces": true,
-							"wrap_width": 80
-						},
-						"translation.x": 0.0,
-						"translation.y": 488.0,
-						"zoom_level": 1.0
-					},
-					"type": "text"
-				},
-				{
-					"buffer": 2,
-					"file": "test/AnyTest.cpp",
-					"settings":
-					{
-						"buffer_size": 1153,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								1042,
-								1042
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/C++/C++.tmLanguage",
-							"tab_size": 2,
-							"translate_tabs_to_spaces": true
-						},
-						"translation.x": 0.0,
-						"translation.y": 38.0,
-						"zoom_level": 1.0
-					},
-					"type": "text"
-				},
-				{
-					"buffer": 3,
-					"file": "interface/BranchHandler.h",
-					"settings":
-					{
-						"buffer_size": 844,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								575,
-								575
+								430,
+								430
 							]
 						],
 						"settings":
@@ -467,27 +575,21 @@
 						"zoom_level": 1.0
 					},
 					"type": "text"
-				}
-			]
-		},
-		{
-			"selected": 1,
-			"sheets":
-			[
+				},
 				{
-					"buffer": 4,
-					"file": "src/EventBase.cc",
+					"buffer": 2,
+					"file": "src/ElectronDemoModule.cc",
 					"settings":
 					{
-						"buffer_size": 900,
+						"buffer_size": 922,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								188,
-								188
+								369,
+								369
 							]
 						],
 						"settings":
@@ -497,25 +599,143 @@
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 123.0,
+						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
 				},
 				{
-					"buffer": 5,
-					"file": "src/TreeEvent.cc",
+					"buffer": 3,
+					"file": "test/ZbbCalc.cpp",
 					"settings":
 					{
-						"buffer_size": 388,
+						"buffer_size": 7663,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								386,
-								386
+								605,
+								605
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/C++/C++.tmLanguage",
+							"tab_size": 2,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 2338.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 4,
+					"file": "interface/SimpleParamParser.h",
+					"settings":
+					{
+						"buffer_size": 1775,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								1499,
+								1499
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/C++/C++.tmLanguage",
+							"tab_size": 2,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 170.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 5,
+					"file": "test/test1.cpp",
+					"settings":
+					{
+						"buffer_size": 3174,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								1733,
+								1733
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/C++/C++.tmLanguage",
+							"tab_size": 2,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 450.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 6,
+					"file": "interface/RatioPlotElement.h",
+					"settings":
+					{
+						"buffer_size": 3088,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								1705,
+								1705
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/C++/C++.tmLanguage",
+							"tab_size": 6,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 491.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				}
+			]
+		},
+		{
+			"selected": 0,
+			"sheets":
+			[
+				{
+					"buffer": 7,
+					"file": "test/YieldTest.cpp",
+					"settings":
+					{
+						"buffer_size": 6303,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								198,
+								198
 							]
 						],
 						"settings":
@@ -571,10 +791,6 @@
 		]
 	},
 	"menu_visible": true,
-	"output.clang":
-	{
-		"height": 69.0
-	},
 	"replace":
 	{
 		"height": 62.0
@@ -585,6 +801,34 @@
 		"height": 0.0,
 		"selected_items":
 		[
+			[
+				"hbbe",
+				"src/HbbEventSplitter.cc"
+			],
+			[
+				"hbb",
+				"interface/HbbEventSplitter.h"
+			],
+			[
+				"elec",
+				"src/ElectronDemoModule.cc"
+			],
+			[
+				"mod",
+				"src/ModuleBase.cc"
+			],
+			[
+				"modul",
+				"interface/ModuleBase.h"
+			],
+			[
+				"analysisbase.h",
+				"interface/AnalysisBase.h"
+			],
+			[
+				"analysisbas",
+				"src/AnalysisBase.cc"
+			],
 			[
 				"",
 				"test/AnyTest.cpp"
@@ -598,11 +842,11 @@
 	},
 	"select_project":
 	{
-		"height": 0.0,
+		"height": 500.0,
 		"selected_items":
 		[
 		],
-		"width": 0.0
+		"width": 380.0
 	},
 	"show_minimap": false,
 	"show_open_files": false,
